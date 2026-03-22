@@ -1,0 +1,34 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-image: url('/images/login-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+main {
+    width: max-content;
+    margin: auto;
+    border-radius: 50px;
+    border: 3px solid transparent;
+    // background: linear-gradient(black, black) padding-box, linear-gradient(to right, rgba(79, 70, 229, 0.6), rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.3), rgba(255, 90, 95, 0.246)) border-box;
+    background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
+    padding: 50px 100px; 
+    backdrop-filter: blur(16px);
+
+    p {
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    div.form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 70px;
+    }
+}

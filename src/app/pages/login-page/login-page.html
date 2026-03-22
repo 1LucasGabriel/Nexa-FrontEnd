@@ -1,0 +1,64 @@
+<main>
+    <img src="/images/logo-white.png" alt="">
+    <p>Acesse sua conta para gerenciar</p>
+
+    <div class="form">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <p-toggleswitch id="teste" [(ngModel)]="keepLogged" [style]="{
+                margin: '0 0 0 auto',
+                '--p-toggleswitch-background': '#9696B3',
+                '--p-toggleswitch-hover-background': '#9696B3',
+                '--p-toggleswitch-checked-background': '#B38D95',
+                '--p-toggleswitch-checked-hover-background': '#B38D95',
+
+                '--p-toggleswitch-handle-background': '#4F46E5',
+                '--p-toggleswitch-handle-hover-background': '#4F46E5',
+                '--p-toggleswitch-handle-checked-background': '#FD5A5D',
+                '--p-toggleswitch-handle-checked-hover-background': '#FD5A5D',
+            }" />
+            <label for="keepLogged">Manter logado</label>
+        </div>
+
+        <p-iconfield>
+            <p-inputicon class="pi pi-user" />
+            <input pInputText [(ngModel)]="objectAuth.email" placeholder="Email ou Usuário" [style]="{
+                '--p-inputtext-border-radius': '15px',
+                '--p-inputtext-focus-border-color': 'none',
+                '--p-inputtext-background': 'rgba(105, 105, 105, 0.30)',
+                padding: '15px 15px 15px 40px',
+                width: '100%'
+            }" />
+        </p-iconfield>
+
+        <p-iconfield>
+            <p-inputicon class="pi pi-lock" />
+            <p-password [(ngModel)]="objectAuth.password" [toggleMask]="true" autocomplete="off" placeholder="Senha" promptLabel="Digite uma senha" weakLabel="Fraca" mediumLabel="Média" strongLabel="Forte"
+            [style]="{
+                '--p-password-border-radius': '15px',
+                width: '100%'
+            }"
+            [inputStyle]="{
+                '--p-inputtext-border-radius': '15px',
+                '--p-inputtext-focus-border-color': 'none',
+                '--p-inputtext-background': 'rgba(105, 105, 105, 0.30)',
+                width: '100%',
+                padding: '15px 15px 15px 40px'
+            }" />
+        </p-iconfield>
+    </div>
+
+    <p-button 
+        label="Entrar" 
+        [style]="{ 
+            width: '100%', 
+            color: 'white',
+            '--p-button-primary-background': '#FF5A5F',
+            '--p-button-primary-hover-background': '#FF5A5F',
+            '--p-button-primary-border-color': '#FF5A5F',
+            '--p-button-primary-hover-border-color': '#FF5A5F',
+            '--p-button-border-radius': '50px',
+        }"
+    />
+</main>
+
+<p-toast position="top-right" />
