@@ -1,0 +1,162 @@
+<!-- dynamic-modal.component.html -->
+<p-dialog
+  [(visible)]="visible"
+  [header]="config.title"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: config.width ?? '480px' }"
+  styleClass="dark-modal"
+  (onHide)="onHide()"
+>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div class="modal-fields">
+
+      @for (field of config.fields; track field.key) {
+        <div class="field" [class.field--half]="field.halfWidth">
+
+          <label [for]="field.key">
+            {{ field.label }}
+            @if (field.required) { <span class="required">*</span> }
+          </label>
+
+          <!-- TEXT / EMAIL / PASSWORD / NUMBER -->
+          @if (['text','email','password','number'].includes(field.type)) {
+            <input
+              pInputText
+              [id]="field.key"
+              [formControlName]="field.key"
+              [type]="field.type"
+              [placeholder]="field.placeholder ?? ''"
+              [class.ng-invalid]="isInvalid(field.key)"
+            />
+          }
+
+          <!-- TEXTAREA -->
+          @if (field.type === 'textarea') {
+            <textarea
+              pTextarea
+              [id]="field.key"
+              [formControlName]="field.key"
+              [placeholder]="field.placeholder ?? ''"
+              [rows]="field.rows ?? 3"
+              [class.ng-invalid]="isInvalid(field.key)"
+            ></textarea>
+          }
+
+          <!-- SELECT -->
+          @if (field.type === 'select') {
+            <p-select
+              [inputId]="field.key"
+              [formControlName]="field.key"
+              [options]="field.options ?? []"
+              optionLabel="label"
+              optionValue="value"
+              [placeholder]="field.placeholder ?? 'Selecione'"
+              [class.ng-invalid]="isInvalid(field.key)"
+            />
+          }
+
+          <!-- MULTISELECT -->
+          @if (field.type === 'multiselect') {
+            <p-multiselect
+              [inputId]="field.key"
+              [formControlName]="field.key"
+              [options]="field.options ?? []"
+              optionLabel="label"
+              optionValue="value"
+              [placeholder]="field.placeholder ?? 'Selecione'"
+              display="chip"
+              [class.ng-invalid]="isInvalid(field.key)"
+            />
+          }
+
+          <!-- DATE -->
+          @if (field.type === 'date') {
+            <p-datepicker
+              [inputId]="field.key"
+              [formControlName]="field.key"
+              [placeholder]="field.placeholder ?? 'dd/mm/aaaa'"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+              [class.ng-invalid]="isInvalid(field.key)"
+            />
+          }
+
+          <!-- INPUT NUMBER -->
+          @if (field.type === 'inputnumber') {
+            <p-inputnumber
+              [inputId]="field.key"
+              [formControlName]="field.key"
+              [placeholder]="field.placeholder ?? ''"
+              [min]="field.min"
+              [max]="field.max"
+              [minFractionDigits]="field.decimals ?? 0"
+              [maxFractionDigits]="field.decimals ?? 0"
+              [showButtons]="field.showButtons ?? false"
+              [mode]="field.currency ? 'currency' : 'decimal'"
+              [currency]="field.currency ?? undefined"
+              locale="pt-BR"
+              [class.ng-invalid]="isInvalid(field.key)"
+            />
+          }
+
+          <!-- TOGGLE -->
+          @if (field.type === 'toggle') {
+            <div class="toggle-row">
+              <p-toggleswitch [formControlName]="field.key" [inputId]="field.key" />
+              @if (field.hint) {
+                <span class="toggle-hint">{{ field.hint }}</span>
+              }
+            </div>
+          }
+
+          <!-- RADIO -->
+          @if (field.type === 'radio') {
+            <div class="radio-group">
+              @for (opt of field.options ?? []; track opt.value) {
+                <div class="radio-item">
+                  <p-radiobutton
+                    [inputId]="field.key + '_' + opt.value"
+                    [formControlName]="field.key"
+                    [value]="opt.value"
+                  />
+                  <label [for]="field.key + '_' + opt.value">{{ opt.label }}</label>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Mensagem de erro -->
+          @if (isInvalid(field.key)) {
+            <small class="error-msg">
+              {{ getError(field) }}
+            </small>
+          }
+
+          <!-- Hint abaixo do campo -->
+          @if (field.hint && field.type !== 'toggle') {
+            <small class="hint-msg">{{ field.hint }}</small>
+          }
+
+        </div>
+      }
+
+    </div>
+
+    <div class="modal-footer">
+      <p-button
+        [label]="config.confirmLabel ?? 'Confirmar'"
+        type="submit"
+        [loading]="loading"
+      />
+      <p-button
+        [label]="config.cancelLabel ?? 'Cancelar'"
+        severity="secondary"
+        [outlined]="true"
+        type="button"
+        (onClick)="onCancel()"
+      />
+    </div>
+  </form>
+</p-dialog>
