@@ -1,0 +1,68 @@
+.status-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+.popover-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  button {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+:host ::ng-deep {
+  .p-datatable {
+    background: transparent;
+  }
+
+  .p-datatable-table {
+    border-spacing: 0 8px !important;
+    border-collapse: separate !important;
+  }
+
+  .p-datatable-thead > tr > th {
+    background: transparent !important;
+    color: #fff !important;
+    border: none !important;
+    font-size: 1rem;
+
+    &:first-child {
+      text-align: center;
+    }
+  }
+
+  .p-datatable-tbody > tr {
+    background: rgba(255, 255, 255, 0.08) !important;
+
+    > td {
+      border: none !important;
+      color: #fff !important;
+      padding: 12px 16px;
+      font-size: 1rem;
+    }
+
+    > td:first-child {
+      border-radius: 12px 0 0 12px;
+    }
+
+    > td:last-child {
+      border-radius: 0 12px 12px 0;
+    }
+  }
+
+  .p-datatable-tbody .p-button-secondary {
+    color: #fff !important;
+  }
+}

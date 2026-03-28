@@ -10,3 +10,28 @@ body {
   margin: 0;
   height: 100%;
 }
+
+.p-popover {
+  background: #1a1a1a !important;
+  border: 1px solid #333 !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+
+  .p-popover-content {
+    background: #1a1a1a !important;
+    padding: 0.5rem;
+  }
+
+  .popover-actions button {
+    color: #fff !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    width: 100%;
+    justify-content: flex-start;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+}
