@@ -3,25 +3,33 @@
   <p-table [value]="data" [dataKey]="dataKey" [tableStyle]="{ 'min-width': '60rem' }">
     <ng-template #header>
       <tr>
-        <th *ngFor="let col of columns" [style.width]="col.width || 'auto'">
-          {{ col.header }}
-        </th>
+        @for (col of columns; track $index) {
+          <th [style.width]="col.width || 'auto'">
+            {{ col.header }}
+          </th>
+        }
         <th style="width:10%">Ações</th>
       </tr>
     </ng-template>
 
     <ng-template #body let-item let-ri="rowIndex">
       <tr>
-        <td *ngFor="let col of columns">
-          <ng-container *ngIf="col.type === 'status'">
-            <div class="status-cell">
-              <span class="status-dot" [style.background-color]="getStatusColor(item[col.field])"></span>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="col.type !== 'status'">
-            {{ item[col.field] }}
-          </ng-container>
-        </td>
+        @for (col of columns; track $index) {
+          <td>
+            @if (col.type === 'status') {
+              <ng-container>
+                <div class="status-cell">
+                  <span class="status-dot" [style.background-color]="getStatusColor(item[col.fieldAPI])"></span>
+                </div>
+              </ng-container>
+            }
+            @if (col.type !== 'status') {
+              <ng-container>
+                {{ item[col.fieldAPI] }}
+              </ng-container>
+            }
+          </td>
+        }
 
         <td>
           <div class="flex items-center justify-center">
@@ -43,13 +51,14 @@
         class="p-button-text"
         (click)="executeAction('edit', actionPopover)">
       </button>
-      <button *ngFor="let act of actions"
-        pButton pRipple type="button"
-        [label]="act.label"
-        [icon]="act.icon"
-        [class]="'p-button-text ' + (act.buttonClass || '')"
-        (click)="executeAction(act.action, actionPopover)">
-      </button>
+      @for (act of actions; track $index) {
+        <button pButton pRipple type="button"
+          [label]="act.label"
+          [icon]="act.icon"
+          [class]="'p-button-text ' + (act.buttonClass || '')"
+          (click)="executeAction(act.action, actionPopover)">
+        </button>
+      }
     </div>
   </p-popover>
 </div>

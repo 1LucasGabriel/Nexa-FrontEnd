@@ -9,11 +9,15 @@ import { RippleModule } from 'primeng/ripple';
 import { PopoverModule } from 'primeng/popover';
 import { MessageService } from 'primeng/api';
 
+export enum TypeTableColumn {
+  Text = 'text',
+  Status = 'status'
+}
 export interface TableColumn {
-  field: string;
+  fieldAPI: string;
   header: string;
   width?: string;
-  type?: 'text' | 'status';
+  type?: TypeTableColumn;
 }
 
 export interface TableAction {
