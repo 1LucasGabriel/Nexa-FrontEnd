@@ -1,3 +1,27 @@
 <div class="card flex justify-center">
-    <p-menu [model]="items" />
+  <p-menu [model]="items" styleClass="menu-custom">
+
+    <ng-template pTemplate="start">
+      <div class="menu-header">
+        <img src="/images/logo-white.png" alt="Nexa" />
+      </div>
+    </ng-template>
+
+    <hr>
+
+    <ng-template pTemplate="end">
+      <div class="menu-footer">
+        <div class="user-info">
+          <img src="assets/user.jpg" alt="User" />
+          <div>
+            <span class="name">{{userName}}</span>
+            <span class="role">{{userRole}}</span>
+          </div>
+        </div>
+
+        <i class="pi pi-sign-out logout"></i>
+      </div>
+    </ng-template>
+
+  </p-menu>
 </div>
