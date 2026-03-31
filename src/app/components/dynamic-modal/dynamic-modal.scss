@@ -1,0 +1,245 @@
+.modal-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.25rem;
+  padding: 0.25rem 0 0.75rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
+
+  &--half { width: calc(50% - 0.625rem); }
+
+  label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #e8eaf0;
+  }
+
+  .required { color: #FF5A5F; margin-left: 2px; }
+
+  input.p-inputtext,
+  textarea.p-textarea {
+    background: #A0A0A0 !important;
+    border: none !important;
+    border-radius: 12px !important;
+    color: #FFFFFF !important;
+    padding: 0.65rem 0.9rem !important;
+    font-size: 0.9rem !important;
+    width: 100%;
+    box-shadow: none !important;
+    outline: none !important;
+
+    &::placeholder          { color: rgba(255,255,255,0.6) !important; }
+    &.ng-invalid.ng-touched { box-shadow: 0 0 0 2px #FF5A5F !important; }
+  }
+
+  p-iconfield {
+    width: 100%;
+
+    .p-iconfield { width: 100%; }
+  }
+
+  p-select, p-datepicker, p-inputnumber, p-multiselect {
+    width: 100%;
+
+    .p-select, .p-datepicker, .p-inputnumber, .p-multiselect {
+      background: #A0A0A0 !important;
+      border: none !important;
+      border-radius: 12px !important;
+      width: 100% !important;
+      box-shadow: none !important;
+
+      &.p-focus, &:focus, &:focus-within {
+        box-shadow: none !important;
+        outline: none !important;
+        border: none !important;
+      }
+    }
+
+    .p-select-label, .p-inputnumber-input, .p-datepicker-input {
+      background: transparent !important;
+      color: #FFFFFF !important;
+      padding: 0.65rem 0.9rem !important;
+      font-size: 0.9rem !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+
+      &::placeholder { color: rgba(255,255,255,0.6) !important; }
+    }
+
+    .p-select-dropdown, .p-datepicker-button {
+      color: #FFFFFF !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  .error-msg { color: #FF5A5F; font-size: 0.76rem; }
+  .hint-msg  { color: #aaa;    font-size: 0.76rem; }
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0;
+
+  .toggle-hint { font-size: 0.85rem; color: #aaa; }
+}
+
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  padding: 0.25rem 0;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  label { font-size: 0.875rem; font-weight: 400; cursor: pointer; color: #e8eaf0; }
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding-top: 1.25rem;
+
+  .p-button:not(.p-button-secondary) {
+    background: #FF5A5F !important;
+    border: none !important;
+    border-radius: 50px !important;
+    padding: 0.6rem 2rem !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    color: #fff !important;
+    box-shadow: none !important;
+
+    &:hover  { opacity: 0.88 !important; }
+    &:focus,
+    &:active { box-shadow: none !important; outline: none !important; }
+  }
+
+  .p-button-secondary {
+    background: #A0A0A0 !important;
+    border: none !important;
+    border-radius: 50px !important;
+    color: #FFFFFF !important;
+    padding: 0.6rem 2rem !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    box-shadow: none !important;
+
+    &:hover  { opacity: 0.85 !important; }
+    &:focus,
+    &:active { box-shadow: none !important; outline: none !important; }
+  }
+}
+
+div.p-dialog.dark-modal,
+.dark-modal .p-dialog,
+.p-dialog.p-component {
+  --p-dialog-border-color: rgba(255, 0, 0, 0.1) !important;
+  --p-dialog-background: rgba(59, 59, 59, 0.45) !important;
+  --p-dialog-header-background: transparent !important;
+  --p-dialog-content-background: transparent !important;
+  --p-dialog-footer-background: transparent !important;
+
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 2px solid transparent !important;
+  border-radius: 12px !important;
+}
+
+.p-datepicker.p-inputwrapper {
+  background: #A0A0A0 !important;
+  border-radius: 12px !important;
+
+  input.p-datepicker-input {
+    background: #A0A0A0 !important;
+    color: #FFFFFF !important;
+    padding-left: 3rem !important;
+
+    &::placeholder { color: rgba(255,255,255,0.6) !important; }
+  }
+
+  button.p-datepicker-dropdown {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    display: flex !important;
+    width: 2.5rem !important;
+    color: #FFFFFF !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 12px 0 0 12px !important;
+    z-index: 1;
+  }
+}
+
+.p-datepicker-panel {
+  [data-p-selected="true"] {
+    background: #FF5A5F !important;
+    color: #fff !important;
+  }
+
+  .p-datepicker-day-selected .p-datepicker-day {
+    background: #FF5A5F !important;
+    color: #fff !important;
+  }
+}
+
+.p-select.p-inputwrapper {
+  background: #A0A0A0 !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+
+  .p-select-label { color: #FFFFFF !important; }
+  .p-placeholder  { color: rgba(255,255,255,0.6) !important; }
+}
+
+.p-select-overlay {
+  .p-select-option:hover,
+  .p-select-option.p-focus {
+    background: rgba(255, 90, 95, 0.15) !important;
+    color: #FF5A5F !important;
+  }
+
+  .p-select-option.p-select-option-selected {
+    background: #FF5A5F !important;
+    color: #fff !important;
+  }
+}
+
+.select-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.option-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.p-iconfield {
+  width: 100%;
+  --p-iconfield-icon-color: #FFFFFF !important;
+
+  input.p-inputtext { padding-left: 2.5rem !important; }
+}

@@ -25,7 +25,7 @@
     "@angular/common": "^20.2.0",
     "@angular/compiler": "^20.2.0",
     "@angular/core": "^20.2.0",
-    "@angular/forms": "^20.2.0",
+    "@angular/forms": "^20.3.18",
     "@angular/platform-browser": "^20.2.0",
     "@angular/router": "^20.2.0",
     "@primeuix/themes": "^2.0.3",
@@ -36,7 +36,7 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular/build": "^20.2.0",
+    "@angular/build": "^20.3.22",
     "@angular/cli": "^20.2.0",
     "@angular/compiler-cli": "^20.2.0",
     "@types/jasmine": "~5.1.0",

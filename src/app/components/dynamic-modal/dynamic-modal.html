@@ -1,39 +1,54 @@
-<!-- dynamic-modal.component.html -->
 <p-dialog
+  appendTo="body"
   [(visible)]="visible"
   [header]="config.title"
-  [modal]="true"
+  [modal]="false"
   [draggable]="false"
   [resizable]="false"
+  [closable]="false"
+  [transitionOptions]="'0ms'"
   [style]="{ width: config.width ?? '480px' }"
   styleClass="dark-modal"
+  maskStyleClass="modal-mask"
   (onHide)="onHide()"
 >
   <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
     <div class="modal-fields">
 
       @for (field of config.fields; track field.key) {
-        <div class="field" [class.field--half]="field.halfWidth">
+        <div class="field" [class.field--half]="field.halfWidth" [style.width]="field.width">
 
           <label [for]="field.key">
             {{ field.label }}
             @if (field.required) { <span class="required">*</span> }
           </label>
 
-          <!-- TEXT / EMAIL / PASSWORD / NUMBER -->
-          @if (['text','email','password','number'].includes(field.type)) {
-            <input
-              pInputText
-              [id]="field.key"
-              [formControlName]="field.key"
-              [type]="field.type"
-              [placeholder]="field.placeholder ?? ''"
-              [class.ng-invalid]="isInvalid(field.key)"
-            />
+          @if ([ModalFieldType.Text, ModalFieldType.Email, ModalFieldType.Password].includes(field.type)) {
+            @if (field.icon) {
+              <p-iconfield>
+                <p-inputicon [styleClass]="field.icon" />
+                <input
+                  pInputText
+                  [id]="field.key"
+                  [formControlName]="field.key"
+                  [type]="field.type"
+                  [placeholder]="field.placeholder ?? ''"
+                  [class.ng-invalid]="isInvalid(field.key)"
+                />
+              </p-iconfield>
+            } @else {
+              <input
+                pInputText
+                [id]="field.key"
+                [formControlName]="field.key"
+                [type]="field.type"
+                [placeholder]="field.placeholder ?? ''"
+                [class.ng-invalid]="isInvalid(field.key)"
+              />
+            }
           }
 
-          <!-- TEXTAREA -->
-          @if (field.type === 'textarea') {
+          @if (field.type === ModalFieldType.Textarea) {
             <textarea
               pTextarea
               [id]="field.key"
@@ -44,8 +59,7 @@
             ></textarea>
           }
 
-          <!-- SELECT -->
-          @if (field.type === 'select') {
+          @if (field.type === ModalFieldType.Select) {
             <p-select
               [inputId]="field.key"
               [formControlName]="field.key"
@@ -53,12 +67,29 @@
               optionLabel="label"
               optionValue="value"
               [placeholder]="field.placeholder ?? 'Selecione'"
+              appendTo="body"
               [class.ng-invalid]="isInvalid(field.key)"
-            />
+            >
+              <ng-template pTemplate="selectedItem" let-option>
+                <div class="select-option">
+                  @if (option.color) {
+                    <span class="option-dot" [style.background]="option.color"></span>
+                  }
+                  {{ option.label }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="item" let-option>
+                <div class="select-option">
+                  @if (option.color) {
+                    <span class="option-dot" [style.background]="option.color"></span>
+                  }
+                  {{ option.label }}
+                </div>
+              </ng-template>
+            </p-select>
           }
 
-          <!-- MULTISELECT -->
-          @if (field.type === 'multiselect') {
+          @if (field.type === ModalFieldType.Multiselect) {
             <p-multiselect
               [inputId]="field.key"
               [formControlName]="field.key"
@@ -71,20 +102,20 @@
             />
           }
 
-          <!-- DATE -->
-          @if (field.type === 'date') {
+          @if (field.type === ModalFieldType.Date) {
             <p-datepicker
               [inputId]="field.key"
               [formControlName]="field.key"
               [placeholder]="field.placeholder ?? 'dd/mm/aaaa'"
               dateFormat="dd/mm/yy"
+              appendTo="body"
+              [autofocus]="false"
               [showIcon]="true"
               [class.ng-invalid]="isInvalid(field.key)"
             />
           }
 
-          <!-- INPUT NUMBER -->
-          @if (field.type === 'inputnumber') {
+          @if (field.type === ModalFieldType.InputNumber) {
             <p-inputnumber
               [inputId]="field.key"
               [formControlName]="field.key"
@@ -101,8 +132,7 @@
             />
           }
 
-          <!-- TOGGLE -->
-          @if (field.type === 'toggle') {
+          @if (field.type === ModalFieldType.Toggle) {
             <div class="toggle-row">
               <p-toggleswitch [formControlName]="field.key" [inputId]="field.key" />
               @if (field.hint) {
@@ -111,8 +141,7 @@
             </div>
           }
 
-          <!-- RADIO -->
-          @if (field.type === 'radio') {
+          @if (field.type === ModalFieldType.Radio) {
             <div class="radio-group">
               @for (opt of field.options ?? []; track opt.value) {
                 <div class="radio-item">
@@ -127,15 +156,11 @@
             </div>
           }
 
-          <!-- Mensagem de erro -->
           @if (isInvalid(field.key)) {
-            <small class="error-msg">
-              {{ getError(field) }}
-            </small>
+            <small class="error-msg">{{ getError(field) }}</small>
           }
 
-          <!-- Hint abaixo do campo -->
-          @if (field.hint && field.type !== 'toggle') {
+          @if (field.hint && field.type !== ModalFieldType.Toggle) {
             <small class="hint-msg">{{ field.hint }}</small>
           }
 
@@ -148,7 +173,6 @@
       <p-button
         [label]="config.confirmLabel ?? 'Confirmar'"
         type="submit"
-        [loading]="loading"
       />
       <p-button
         [label]="config.cancelLabel ?? 'Cancelar'"
