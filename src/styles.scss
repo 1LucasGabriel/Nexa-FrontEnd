@@ -3,12 +3,16 @@
 @import "primeicons/primeicons.css";
 
 * {
-    font-family: 'Roboto';
+  font-family: 'Roboto';
 }
 
 body {
   margin: 0;
   height: 100%;
+  background-image: url('/images/background-geral.png');
+  background-size: cover;
+  // background-position: center;
+  // background-attachment: fixed;
 }
 
 .p-popover {
