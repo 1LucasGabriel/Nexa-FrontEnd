@@ -45,4 +45,8 @@ export class SideMenu implements OnInit {
   public irPara(rota: string) {
     console.log("FUTURAMENTE IRÁ NAVEGAR PARA:", rota);
   }
+
+  public sair() {
+    console.log("FUTURAMENTE IRA DESLOGAR O USUÁRIO")
+  }
 }
