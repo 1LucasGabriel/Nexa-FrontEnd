@@ -1,60 +1,75 @@
-<div class="card">
-  <p-toast />
-  <p-table [value]="data" [dataKey]="dataKey" [tableStyle]="{ 'min-width': '60rem' }">
+<div class="table-container">
+  <p-table
+    [value]="data"
+    [dataKey]="dataKey"
+    [lazy]="true"
+    (onLazyLoad)="loadData($event)"
+    [paginator]="true"
+    [rows]="rows"
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+    [tableStyle]="{ 'min-width': '60rem' }">
+
     <ng-template #header>
-      <tr>
+      <tr class="header-row">
         @for (col of columns; track $index) {
-          <th [style.width]="col.width || 'auto'">
-            {{ col.header }}
-          </th>
+          <th [style.width]="col.width || 'auto'">{{ col.header }}</th>
         }
-        <th style="width:10%">Ações</th>
+        @if (actions.length > 0) {
+          <th style="width:12%; text-align: center;">Ações</th>
+        }
       </tr>
     </ng-template>
 
-    <ng-template #body let-item let-ri="rowIndex">
+    <ng-template #body let-item>
       <tr>
         @for (col of columns; track $index) {
           <td>
-            @if (col.type === 'status') {
-              <ng-container>
-                <div class="status-cell">
-                  <span class="status-dot" [style.background-color]="getStatusColor(item[col.fieldAPI])"></span>
-                </div>
-              </ng-container>
-            }
-            @if (col.type !== 'status') {
-              <ng-container>
-                {{ item[col.fieldAPI] }}
-              </ng-container>
+            @if (col.type === 'status' || col.type === 'badge') {
+              @let status = getStatusStyles(item[col.fieldAPI]);
+              <div class="badge-vibrant" [style.background-color]="status.color + '55'" [style.border-color]="status.color">
+                <span class="dot-large" [style.background-color]="status.color"></span>
+                <span [style.color]="'#fff'">{{ status.label }}</span>
+              </div>
+            } @else {
+              {{ item[col.fieldAPI] }}
             }
           </td>
         }
 
-        <td>
-          <div class="flex items-center justify-center">
-            <button pButton pRipple type="button"
-              icon="pi pi-ellipsis-h"
-              (click)="openPopover($event, actionPopover, item)"
-              class="p-button-text p-button-rounded p-button-secondary">
-            </button>
-          </div>
-        </td>
+        @if (actions.length > 0) {
+          <td class="text-center">
+            <div class="actions-wrapper">
+              @if (actions.length > 3) {
+                <button pButton pRipple type="button"
+                  icon="pi pi-ellipsis-h"
+                  (click)="openPopover($event, actionPopover, item)"
+                  class="p-button-text p-button-rounded p-button-secondary">
+                </button>
+              } @else {
+                @for (act of actions; track $index) {
+                  <button pButton pRipple type="button"
+                    [icon]="act.icon"
+                    [pTooltip]="act.label"
+                    tooltipPosition="top"
+                    (click)="triggerAction(act.action, item)"
+                    [class]="'p-button-text p-button-rounded ' + (act.buttonClass || 'p-button-secondary')">
+                  </button>
+                }
+              }
+            </div>
+          </td>
+        }
       </tr>
     </ng-template>
   </p-table>
 
   <p-popover #actionPopover>
     <div class="popover-actions">
-      <button pButton pRipple type="button"
-        label="Alterar" icon="pi pi-pencil"
-        class="p-button-text"
-        (click)="executeAction('edit', actionPopover)">
-      </button>
       @for (act of actions; track $index) {
         <button pButton pRipple type="button"
-          [label]="act.label"
-          [icon]="act.icon"
+          [label]="act.label" [icon]="act.icon"
           [class]="'p-button-text ' + (act.buttonClass || '')"
           (click)="executeAction(act.action, actionPopover)">
         </button>
