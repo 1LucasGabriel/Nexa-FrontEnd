@@ -8,6 +8,10 @@
   .p-datatable {
     background: transparent;
 
+    .p-datatable-loading-overlay {
+      background: transparent !important;
+    }
+
     .p-datatable-table {
       border-spacing: 0 4px !important;
       border-collapse: separate !important;
@@ -45,6 +49,8 @@
   .badge-vibrant {
     display: inline-flex;
     align-items: center;
+    justify-content: flex-start;
+    min-width: 120px;
     padding: 6px 14px;
     border-radius: 30px;
     border: 1.5px solid;
@@ -108,7 +114,7 @@
     .p-paginator-next,
     .p-paginator-last {
       color: #fff !important;
-      border-radius: 8px !important;
+      border-radius: 50% !important;
       min-width: 36px;
       height: 36px;
 
