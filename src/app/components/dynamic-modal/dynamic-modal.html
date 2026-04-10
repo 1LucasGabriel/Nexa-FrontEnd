@@ -5,7 +5,7 @@
   [modal]="false"
   [draggable]="false"
   [resizable]="false"
-  [closable]="false"
+  [closable]="true"
   [transitionOptions]="'0ms'"
   [style]="{ width: config.width ?? '480px' }"
   styleClass="dark-modal"
@@ -66,6 +66,7 @@
               [options]="field.options ?? []"
               optionLabel="label"
               optionValue="value"
+              emptyMessage="Nenhum resultado encontrado"
               [placeholder]="field.placeholder ?? 'Selecione'"
               appendTo="body"
               [class.ng-invalid]="isInvalid(field.key)"
@@ -111,6 +112,7 @@
               appendTo="body"
               [autofocus]="false"
               [showIcon]="true"
+              [firstDayOfWeek]="0"
               [class.ng-invalid]="isInvalid(field.key)"
             />
           }

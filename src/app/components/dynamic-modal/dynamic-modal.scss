@@ -23,7 +23,7 @@
 
   input.p-inputtext,
   textarea.p-textarea {
-    background: #A0A0A0 !important;
+    background: rgba(217, 217, 217, 0.2) !important;
     border: none !important;
     border-radius: 12px !important;
     color: #FFFFFF !important;
@@ -39,7 +39,6 @@
 
   p-iconfield {
     width: 100%;
-
     .p-iconfield { width: 100%; }
   }
 
@@ -47,7 +46,7 @@
     width: 100%;
 
     .p-select, .p-datepicker, .p-inputnumber, .p-multiselect {
-      background: #A0A0A0 !important;
+      background: rgba(217, 217, 217, 0.2) !important;
       border: none !important;
       border-radius: 12px !important;
       width: 100% !important;
@@ -130,7 +129,7 @@
   }
 
   .p-button-secondary {
-    background: #A0A0A0 !important;
+    background: rgba(217, 217, 217, 0.2) !important;
     border: none !important;
     border-radius: 50px !important;
     color: #FFFFFF !important;
@@ -153,21 +152,26 @@ div.p-dialog.dark-modal,
   --p-dialog-header-background: transparent !important;
   --p-dialog-content-background: transparent !important;
   --p-dialog-footer-background: transparent !important;
-
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
   border: 2px solid transparent !important;
   border-radius: 12px !important;
+  z-index: 1100 !important;
+  pointer-events: all !important;
+}
+
+.p-dialog-mask {
+  pointer-events: all !important;
 }
 
 .p-datepicker.p-inputwrapper {
-  background: #A0A0A0 !important;
+  background: rgba(217, 217, 217, 0.2) !important;
   border-radius: 12px !important;
 
   input.p-datepicker-input {
-    background: #A0A0A0 !important;
     color: #FFFFFF !important;
     padding-left: 3rem !important;
+    border-radius: 0 12px 12px 0 !important;
 
     &::placeholder { color: rgba(255,255,255,0.6) !important; }
   }
@@ -201,7 +205,7 @@ div.p-dialog.dark-modal,
 }
 
 .p-select.p-inputwrapper {
-  background: #A0A0A0 !important;
+  background: rgba(217, 217, 217, 0.2) !important;
   border: none !important;
   border-radius: 12px !important;
   box-shadow: none !important;
@@ -242,4 +246,30 @@ div.p-dialog.dark-modal,
   --p-iconfield-icon-color: #FFFFFF !important;
 
   input.p-inputtext { padding-left: 2.5rem !important; }
+}
+
+[data-pc-name="inputnumber"] {
+  background: rgba(217, 217, 217, 0.2) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  width: 100% !important;
+  box-shadow: none !important;
+
+  input {
+    background: transparent !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    padding: 0.65rem 0.9rem !important;
+    font-size: 0.9rem !important;
+    width: 100% !important;
+
+    &::placeholder { color: rgba(255,255,255,0.6) !important; }
+  }
+}
+
+input {
+  position: relative !important;
+  z-index: 99999 !important;
 }

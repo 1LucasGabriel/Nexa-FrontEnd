@@ -95,7 +95,7 @@ export interface ModalConfig {
     InputIconModule,
   ],
 })
-export class DynamicModalComponent implements OnChanges {
+export class DynamicModal implements OnChanges {
   readonly ModalFieldType = ModalFieldType;
   private fb = inject(FormBuilder);
 

@@ -11,7 +11,6 @@ const MyPreset = definePreset(Aura, {
   components: {
     dialog: {
       root: {
-        background: 'rgba(45, 47, 60, 0.82)',
         borderColor: 'transparent',
         borderRadius: '20px',
       }
@@ -19,14 +18,25 @@ const MyPreset = definePreset(Aura, {
   }
 });
 
-
-
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    providePrimeNG({ theme: { preset: MyPreset } }),
+    providePrimeNG({
+      theme: { preset: MyPreset },
+      translation: {
+        emptyMessage: 'Nenhum resultado encontrado',
+        emptyFilterMessage: 'Nenhum resultado encontrado',
+        dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+        dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+        dayNamesMin: ['Do','Se','Te','Qu','Qu','Se','Sá'],
+        monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+        monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+        today: 'Hoje',
+        clear: 'Limpar',
+      }
+    }),
     provideAnimations(),
     provideHttpClient()
   ]

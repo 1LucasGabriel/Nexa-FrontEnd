@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DynamicModalComponent } from './dynamic-modal';
+import { DynamicModal } from './dynamic-modal';
 
 describe('DynamicModal', () => {
-  let component: DynamicModalComponent;
-  let fixture: ComponentFixture<DynamicModalComponent>;
+  let component: DynamicModal;
+  let fixture: ComponentFixture<DynamicModal>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DynamicModalComponent]
+      imports: [DynamicModal]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DynamicModalComponent);
+    fixture = TestBed.createComponent(DynamicModal);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
