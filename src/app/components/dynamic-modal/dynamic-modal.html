@@ -1,0 +1,188 @@
+<p-dialog
+  appendTo="body"
+  [(visible)]="visible"
+  [header]="config.title"
+  [modal]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [transitionOptions]="'0ms'"
+  [style]="{ width: config.width ?? '480px' }"
+  styleClass="dark-modal"
+  maskStyleClass="modal-mask"
+  (onHide)="onHide()"
+>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+    <div class="modal-fields">
+
+      @for (field of config.fields; track field.key) {
+        <div class="field" [class.field--half]="field.halfWidth" [style.width]="field.width">
+
+          <label [for]="field.key">
+            {{ field.label }}
+            @if (field.required) { <span class="required">*</span> }
+          </label>
+
+          @if ([ModalFieldType.Text, ModalFieldType.Email, ModalFieldType.Password].includes(field.type)) {
+            @if (field.icon) {
+              <p-iconfield>
+                <p-inputicon [styleClass]="field.icon" />
+                <input
+                  pInputText
+                  [id]="field.key"
+                  [formControlName]="field.key"
+                  [type]="field.type"
+                  [placeholder]="field.placeholder ?? ''"
+                  [class.ng-invalid]="isInvalid(field.key)"
+                />
+              </p-iconfield>
+            } @else {
+              <input
+                pInputText
+                [id]="field.key"
+                [formControlName]="field.key"
+                [type]="field.type"
+                [placeholder]="field.placeholder ?? ''"
+                [class.ng-invalid]="isInvalid(field.key)"
+              />
+            }
+          }
+
+          @if (field.type === ModalFieldType.Textarea) {
+            <textarea
+              pTextarea
+              [id]="field.key"
+              [formControlName]="field.key"
+              [placeholder]="field.placeholder ?? ''"
+              [rows]="field.rows ?? 3"
+              [class.ng-invalid]="isInvalid(field.key)"
+            ></textarea>
+          }
+
+          @if (field.type === ModalFieldType.Select) {
+            <p-select
+              [inputId]="field.key"
+              [formControlName]="field.key"
+              [options]="field.options ?? []"
+              optionLabel="label"
+              optionValue="value"
+              emptyMessage="Nenhum resultado encontrado"
+              [placeholder]="field.placeholder ?? 'Selecione'"
+              appendTo="body"
+              [class.ng-invalid]="isInvalid(field.key)"
+            >
+              <ng-template pTemplate="selectedItem" let-option>
+                <div class="select-option">
+                  @if (option.color) {
+                    <span class="option-dot" [style.background]="option.color"></span>
+                  }
+                  {{ option.label }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="item" let-option>
+                <div class="select-option">
+                  @if (option.color) {
+                    <span class="option-dot" [style.background]="option.color"></span>
+                  }
+                  {{ option.label }}
+                </div>
+              </ng-template>
+            </p-select>
+          }
+
+          @if (field.type === ModalFieldType.Multiselect) {
+            <p-multiselect
+              [inputId]="field.key"
+              [formControlName]="field.key"
+              [options]="field.options ?? []"
+              optionLabel="label"
+              optionValue="value"
+              [placeholder]="field.placeholder ?? 'Selecione'"
+              display="chip"
+              [class.ng-invalid]="isInvalid(field.key)"
+            />
+          }
+
+          @if (field.type === ModalFieldType.Date) {
+            <p-datepicker
+              [inputId]="field.key"
+              [formControlName]="field.key"
+              [placeholder]="field.placeholder ?? 'dd/mm/aaaa'"
+              dateFormat="dd/mm/yy"
+              appendTo="body"
+              [autofocus]="false"
+              [showIcon]="true"
+              [firstDayOfWeek]="0"
+              [class.ng-invalid]="isInvalid(field.key)"
+            />
+          }
+
+          @if (field.type === ModalFieldType.InputNumber) {
+            <p-inputnumber
+              [inputId]="field.key"
+              [formControlName]="field.key"
+              [placeholder]="field.placeholder ?? ''"
+              [min]="field.min"
+              [max]="field.max"
+              [minFractionDigits]="field.decimals ?? 0"
+              [maxFractionDigits]="field.decimals ?? 0"
+              [showButtons]="field.showButtons ?? false"
+              [mode]="field.currency ? 'currency' : 'decimal'"
+              [currency]="field.currency ?? undefined"
+              locale="pt-BR"
+              [class.ng-invalid]="isInvalid(field.key)"
+            />
+          }
+
+          @if (field.type === ModalFieldType.Toggle) {
+            <div class="toggle-row">
+              <p-toggleswitch [formControlName]="field.key" [inputId]="field.key" />
+              @if (field.hint) {
+                <span class="toggle-hint">{{ field.hint }}</span>
+              }
+            </div>
+          }
+
+          @if (field.type === ModalFieldType.Radio) {
+            <div class="radio-group">
+              @for (opt of field.options ?? []; track opt.value) {
+                <div class="radio-item">
+                  <p-radiobutton
+                    [inputId]="field.key + '_' + opt.value"
+                    [formControlName]="field.key"
+                    [value]="opt.value"
+                  />
+                  <label [for]="field.key + '_' + opt.value">{{ opt.label }}</label>
+                </div>
+              }
+            </div>
+          }
+
+          @if (isInvalid(field.key)) {
+            <small class="error-msg">{{ getError(field) }}</small>
+          }
+
+          @if (field.hint && field.type !== ModalFieldType.Toggle) {
+            <small class="hint-msg">{{ field.hint }}</small>
+          }
+
+        </div>
+      }
+
+    </div>
+
+    <div class="modal-footer">
+      <p-button
+        [label]="config.confirmLabel ?? 'Confirmar'"
+        type="submit"
+      />
+      <p-button
+        [label]="config.cancelLabel ?? 'Cancelar'"
+        severity="secondary"
+        [outlined]="true"
+        type="button"
+        (onClick)="onCancel()"
+      />
+    </div>
+  </form>
+</p-dialog>
