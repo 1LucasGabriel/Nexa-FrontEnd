@@ -1,4 +1,4 @@
-<div class="card flex justify-center">
+<!-- <div class="card flex justify-center">
   <p-menu [model]="items" styleClass="menu-custom">
 
     <ng-template pTemplate="start">
@@ -16,6 +16,35 @@
           <div>
             <span class="name">{{userName}}</span>
             <span class="role">{{userRole}}</span>
+          </div>
+        </div>
+
+        <i class="pi pi-sign-out logout" (click)="sair()"></i>
+      </div>
+    </ng-template>
+
+  </p-menu>
+</div> -->
+
+<div class="menu-wrapper" [class.expanded]="isExpanded" (mouseenter)="isExpanded = true" (mouseleave)="isExpanded = false">
+  <p-menu [model]="items" styleClass="menu-custom">
+
+    <ng-template pTemplate="start">
+      <div class="menu-header">
+        <img class="logo-full" src="/images/logo-white.png" alt="Nexa" />
+        <img class="logo-icon" src="/images/x-white.png" alt="X" />
+      </div>
+    </ng-template>
+
+    <hr>
+
+    <ng-template pTemplate="end">
+      <div class="menu-footer">
+        <div class="user-info">
+          <img src="assets/user.jpg" alt="User" />
+          <div class="user-text">
+            <span class="name">{{ userName }}</span>
+            <span class="role">{{ userRole }}</span>
           </div>
         </div>
 

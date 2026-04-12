@@ -1,58 +1,291 @@
-div {
-  font-size: 20px;
-  max-width: 280px;
+// div {
+//   font-size: 20px;
+//   max-width: 280px;
+// }
+
+// :host ::ng-deep .menu-custom.p-menu {
+//   background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
+//   border-radius: 50px;
+//   border: 3px solid rgba(255, 255, 255, 0.185);
+//   backdrop-filter: blur(16px);
+//   padding: 10px;
+// }
+
+// .menu-header {
+//   display: flex;
+//   justify-content: center;
+//   padding: 20px 0;
+// }
+
+// .menu-header img {
+//   width: 120px;
+// }
+
+// .menu-footer {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   padding: 15px;
+//   margin-top: 65%;
+// }
+
+// .user-info {
+//   display: flex;
+//   gap: 10px;
+//   width: 100%;
+// }
+
+// .user-info img {
+//   width: 35px;
+//   height: 35px;
+//   border-radius: 50%;
+// }
+
+// .user-info .name {
+//   display: block;
+//   font-size: 14px;
+// }
+
+// .user-info .role {
+//   display: block;
+//   font-size: 12px;
+//   opacity: 0.7;
+// }
+
+// .logout {
+//   cursor: pointer;
+//   font-size: 18px;
+// }
+
+
+
+
+
+$collapsed-width: 72px;
+$expanded-width: 260px;
+$transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+.menu-wrapper {
+  width: $collapsed-width;
+  transition: width $transition;
+
+  &.expanded {
+    width: $expanded-width;
+  }
+}
+
+:host ::ng-deep .p-menu {
+  --p-menu-item-focus-background: transparent;
 }
 
 :host ::ng-deep .menu-custom.p-menu {
+  width: 100% !important;
+  min-width: unset !important;
+  max-width: unset !important;
+  min-height: 560px;
   background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
-  border-radius: 50px;
-  border: 3px solid rgba(255, 255, 255, 0.185);
+  border-radius: 28px;           
+  border: 1.5px solid rgba(255, 255, 255, 0.185);
   backdrop-filter: blur(16px);
-  padding: 10px;
+  padding: 10px 8px;
+  overflow: hidden;               
+  display: flex;
+  flex-direction: column;
+
+
+  .p-menuitem-link {
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    justify-content: center;      
+    transition: background $transition;
+    overflow: hidden;             
+
+    &:focus, &:active, &.p-focus {
+      background: transparent !important;
+      box-shadow: none !important;
+      outline: none !important;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
+  }
+
+  .p-menuitem.p-focus > .p-menuitem-link, .p-menuitem > .p-menuitem-link:not(.p-disabled):focus {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .p-menu-separator, .p-submenu-header {
+    display: none !important;
+  }
+
+  .p-menuitem-icon {
+    font-size: 18px;
+    color: white !important;
+    min-width: 20px;
+    flex-shrink: 0;
+  }
+
+  .p-menuitem-text {
+    white-space: nowrap;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: opacity $transition, width $transition;
+  }
+
+  .p-menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  span.p-menu-item-label.ng-star-inserted {
+    display: none;
+  }
+
+  a.p-ripple.p-menu-item-link.ng-star-inserted {
+    padding-left: 40%; 
+    transition: padding-left $transition;
+  }
 }
 
 .menu-header {
   display: flex;
   justify-content: center;
-  padding: 20px 0;
-}
+  align-items: center;
+  padding: 20px 30px 16px;
+  min-height: 72px;
+  overflow: hidden;
 
-.menu-header img {
-  width: 120px;
+  .logo-full {
+    width: 110px;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: opacity $transition, width $transition;
+  }
+
+  .logo-icon {
+    width: 28px;
+    opacity: 1;
+    transition: opacity $transition;
+    flex-shrink: 0;
+  }
 }
 
 .menu-footer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 15px;
-  margin-top: 65%;
+  padding: 12px 8px;
+  margin-top: auto;
+  overflow: hidden;
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    img {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .user-text {
+      width: 0;
+      opacity: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      transition: opacity $transition, width $transition;
+      margin-left: 0;
+
+      .name {
+        display: block;
+        font-size: 13px;
+        color: white;
+      }
+
+      .role {
+        display: block;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+    }
+  }
+
+  .logout {
+    cursor: pointer;
+    font-size: 17px;
+    color: white;
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    flex-shrink: 0;
+    transition: opacity $transition, width $transition;
+  }
 }
 
-.user-info {
-  display: flex;
-  gap: 10px;
-  width: 100%;
+:host ::ng-deep .menu-wrapper.expanded .menu-custom.p-menu {
+  .p-menu-item-content {
+    margin-left: 10px;
+  }
+
+  .p-menuitem-text {
+    opacity: 1;
+    width: 160px;
+  }
+
+  .p-menuitem-link {
+    justify-content: flex-start;
+    padding: 10px 12px;
+  }
+
+  
+  span.p-menu-item-label.ng-star-inserted {
+    display: contents;
+  }
+
+  a.p-ripple.p-menu-item-link.ng-star-inserted {
+    padding-left: 5%; 
+    transition: padding-left $transition;
+  }
 }
 
-.user-info img {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-}
+.menu-wrapper.expanded {
+  .menu-header {
+    .logo-full {
+      opacity: 1;
+      width: 110px;
+    }
+    .logo-icon {
+      opacity: 0;
+      width: 0;
+    }
+  }
 
-.user-info .name {
-  display: block;
-  font-size: 14px;
-}
+  .menu-footer {
+    margin-left: 15px;
 
-.user-info .role {
-  display: block;
-  font-size: 12px;
-  opacity: 0.7;
-}
+    .user-info {
+      justify-content: flex-start;
+      gap: 10px;
 
-.logout {
-  cursor: pointer;
-  font-size: 18px;
+      .user-text {
+        opacity: 1;
+        width: 130px;
+      }
+    }
+
+    .logout {
+      opacity: 1;
+      width: 24px;
+    }
+  }
 }
