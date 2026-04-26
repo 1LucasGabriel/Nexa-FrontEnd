@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { IconFieldModule } from "primeng/iconfield";
 import { InputIconModule } from "primeng/inputicon";
 
@@ -19,6 +19,8 @@ export class DynamicSearchBar {
   @Input() borderColor: string = 'rgba(255,255,255,0.2)'
   @Input() textColor: string = '#ffffff'
   @Input() placeholderColor: string = 'rgba(255,255,255,0.6)'
+
+  @Output() onSearch = new EventEmitter<string>();
 
   get containerStyles() {
     return {
@@ -51,5 +53,10 @@ export class DynamicSearchBar {
       'font-size': '16px',
       cursor: 'pointer'
     };
+  }
+
+  handleInput(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.onSearch.emit(value);
   }
 }

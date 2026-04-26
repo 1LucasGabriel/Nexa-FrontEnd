@@ -1,4 +1,4 @@
 <p-iconfield class="dynamic-search" [ngStyle]="containerStyles">
-    <input type="text" pInputText [placeholder]="placeholder" [ngStyle]="inputStyles"/>
+    <input type="text" pInputText [placeholder]="placeholder" [ngStyle]="inputStyles" (input)="handleInput($event)"/>
     <p-inputicon class="pi pi-search search-icon" [ngStyle]="iconStyles"/>
 </p-iconfield>
