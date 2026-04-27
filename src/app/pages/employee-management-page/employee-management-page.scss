@@ -1,0 +1,30 @@
+main {
+    margin: 50px;
+    display: flex;
+
+    section {
+        margin-left: 50px;
+
+        width: 100% !important;
+        min-width: unset !important;
+        max-width: unset !important;
+        height: 80vh;
+        background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
+        border-radius: 28px;           
+        border: 1.5px solid rgba(255, 255, 255, 0.185);
+        backdrop-filter: blur(16px);
+        padding: 10px 8px;
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            margin: 0px 10px;
+
+            .button-search {
+                margin: 20px 0;
+                display: flex;
+                gap: 25px;
+            }
+        }
+    }
+}
