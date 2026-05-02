@@ -6,13 +6,14 @@
             <h1>Cadastrar Funcionários</h1>
 
             <div class="button-search">
-                <app-dynamic-button [text]="buttonText" [isRounded]="true" (buttonClick)="addEmployee()"></app-dynamic-button>
-                <app-dynamic-search-bar></app-dynamic-search-bar>
+                <app-dynamic-button [text]="buttonText" [isRounded]="true" (buttonClick)="openAddModal()"></app-dynamic-button>
+                <app-dynamic-search-bar (onSearch)="onSearch($event)"></app-dynamic-search-bar>
             </div>
         </div>
 
-        <app-dynamic-table [columns]="columns" [data]="data" [actions]="actions" (onAction)="handleAction($event)" [statusColorMap]="statusColorMap"></app-dynamic-table>
+        <app-dynamic-table [columns]="columns" [data]="filteredData" [rows]="rows" [totalRecords]="filteredData.length" [actions]="actions" (onAction)="handleAction($event)" [statusColorMap]="statusColorMap"></app-dynamic-table>
     </section>
 
-    <app-dynamic-modal [config]="config" [visible]="isModalOpen" (visibleChange)="isModalOpen = $event"></app-dynamic-modal>
+    <p-confirmdialog />
+    <app-dynamic-modal [title]="modalTitle" [initialData]="selectedEmployee" [config]="config" [visible]="isModalOpen" (visibleChange)="onModalVisibilityChange($event)" (confirm)="onConfirm($event)"></app-dynamic-modal>
 </main>
