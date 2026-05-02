@@ -11,6 +11,7 @@ import { OutputAuthenticateDTO } from '../../dtos/output-authenticate-dto';
 import { ToastModule } from 'primeng/toast';
 import { RippleModule } from 'primeng/ripple';
 import { MessageService, ToastMessageOptions } from 'primeng/api';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,6 +25,7 @@ import { MessageService, ToastMessageOptions } from 'primeng/api';
 export class LoginPage {
   private authenticateService = inject(AuthenticateService);
   private messageService = inject(MessageService);
+  private router = inject(Router);
 
   keepLogged: boolean = false
   objectAuth: OutputAuthenticateDTO = {
@@ -32,10 +34,15 @@ export class LoginPage {
   }
 
   public sendLogin() {
-    this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Logado com sucesso'})
-    this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Erro ao fazer login. Tente novamente'})
-    this.authenticateService.postAuthenticate(this.objectAuth).subscribe((value) => {
-      console.log(value);
-    })
+    this.authenticateService.postLogin(this.objectAuth).subscribe({
+      next: (value) => {
+        this.authenticateService.setToken(value.token);
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Logado com sucesso'})
+        this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Erro ao fazer login. Tente novamente'})
+      }
+    });
   }
 }

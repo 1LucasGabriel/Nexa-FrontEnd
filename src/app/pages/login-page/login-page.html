@@ -32,7 +32,7 @@
 
         <p-iconfield>
             <p-inputicon class="pi pi-lock" />
-            <p-password [(ngModel)]="objectAuth.password" [toggleMask]="true" autocomplete="off" placeholder="Senha" promptLabel="Digite uma senha" weakLabel="Fraca" mediumLabel="Média" strongLabel="Forte"
+            <p-password [(ngModel)]="objectAuth.password" [toggleMask]="true" autocomplete="off" placeholder="Senha" promptLabel="Digite uma senha" weakLabel="Fraca" mediumLabel="Média" strongLabel="Forte" [feedback]="false"
             [style]="{
                 '--p-password-border-radius': '15px',
                 width: '100%'
