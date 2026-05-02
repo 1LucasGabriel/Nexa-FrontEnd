@@ -44,9 +44,13 @@ export class DynamicTable {
 
   selectedItem: any = null;
 
-  getStatusStyles(value: string) {
-    const normalized = value?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    return this.statusColorMap[value] || this.statusColorMap[normalized] || { color: '#6b7280', label: value };
+  getStatusStyles(value: any) {
+    if (value === null || value === undefined) {
+      return { color: '#6b7280', label: '' };
+    }
+
+    const normalized = String(value).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return this.statusColorMap[value] || this.statusColorMap[normalized] || { color: '#6b7280', label: String(value) };
   }
 
   triggerAction(action: string, item: any) {

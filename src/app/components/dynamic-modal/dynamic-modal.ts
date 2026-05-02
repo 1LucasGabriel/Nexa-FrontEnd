@@ -104,6 +104,8 @@ export class DynamicModal implements OnChanges {
   @Input({ required: true }) config!: ModalConfig;
   @Output() confirm = new EventEmitter<Record<string, any>>();
   @Output() cancel  = new EventEmitter<void>();
+  @Input() initialData: Record<string, any> | null = null;
+  @Input() title: string = '';
 
   form!: FormGroup;
 
@@ -112,6 +114,9 @@ export class DynamicModal implements OnChanges {
     if (changes['visible']?.currentValue === true) {
       this.form?.markAsUntouched();
       this.form?.markAsPristine();
+    }
+    if ((changes['config'] || changes['initialData']) && this.config) {
+      this.buildForm();
     }
   }
 
@@ -123,6 +128,7 @@ export class DynamicModal implements OnChanges {
       if (field.type === ModalFieldType.Email)  vals.push(Validators.email);
       if (field.validators)                    vals.push(...field.validators);
       controls[field.key] = [field.defaultValue ?? (field.type === ModalFieldType.Toggle ? false : null), vals];
+      controls[field.key] = [this.initialData?.[field.key] ?? field.defaultValue ?? (field.type === ModalFieldType.Toggle ? false : null), vals];
     }
     this.form = this.fb.group(controls);
   }
