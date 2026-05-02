@@ -11,7 +11,7 @@ export interface Employee {
     role: string,
     phoneNumber: string,
     hireDate: Date,
-    employeeStatus: EmployeeStatus,
+    status: EmployeeStatus,
     housingId: number,
     housing?: Housing
 }
