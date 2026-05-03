@@ -1,0 +1,22 @@
+<div class="map-card" [style.width]="width" [style.height]="height">
+  <div #mapContainer class="map-container"></div>
+
+  @if (routeDistance || routeDuration) {
+    <div class="route-info">
+      <div class="info-item">
+        <i class="pi pi-map-marker"></i>
+        <span>{{ routeDistance }}</span>
+      </div>
+      <div class="info-item">
+        <i class="pi pi-clock"></i>
+        <span>{{ routeDuration }}</span>
+      </div>
+    </div>
+  }
+
+  @if (loading) {
+    <div class="loading-overlay">
+      <i class="pi pi-spin pi-spinner"></i>
+    </div>
+  }
+</div>
