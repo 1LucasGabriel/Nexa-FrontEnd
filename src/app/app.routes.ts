@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { LoginPage } from './pages/login-page/login-page';
-import { EmployeeManagementPage } from './pages/employee-management-page/employee-management-page';
 
 export const routes: Routes = [   
     {
@@ -12,6 +10,11 @@ export const routes: Routes = [
         path: 'login',
         title: 'Nexa - Login',
         loadComponent: () => import('./pages/login-page/login-page').then(m => m.LoginPage)
+    },
+    {
+        path: 'home',
+        title: 'Nexa - Home',
+        loadComponent: () => import('./pages/home-page/home-page').then(m => m.HomePage)
     },
     {
         path: 'employee-management',
