@@ -1,0 +1,32 @@
+<main>
+    <app-side-menu></app-side-menu>
+
+    <section>
+        <aside>
+            <h3>Veículos</h3>
+
+            <div class="vehicle">
+                <div class="data">
+                    <p-chip label="LWUW-7M7" icon="pi pi-circle-fill" />
+                    <p>Sprinter</p>
+                </div>
+
+                <div class="capacity">
+                    <p>03/12</p>
+                </div>
+            </div>
+
+            <app-dynamic-button [text]="textButton" [width]="widthButton"></app-dynamic-button>
+        </aside>
+
+        <div class="header-section">
+            <h1>Alocação Funcionários/Veículos</h1>
+
+            <div class="button-search">
+            </div>
+        </div>
+    </section>
+<!-- 
+    <p-confirmdialog />
+    <app-dynamic-modal [title]="modalTitle" [initialData]="selectedEmployee" [config]="config" [visible]="isModalOpen" (visibleChange)="onModalVisibilityChange($event)" (confirm)="onConfirm($event)"></app-dynamic-modal> -->
+</main>

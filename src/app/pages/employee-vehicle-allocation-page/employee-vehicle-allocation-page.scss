@@ -1,0 +1,75 @@
+main {
+    margin: 50px;
+    display: flex;
+
+    section {
+        margin-left: 50px;
+        width: 100% !important;
+        min-width: unset !important;
+        max-width: unset !important;
+        height: 80vh;
+        background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
+        border-radius: 28px;           
+        border: 1.5px solid rgba(255, 255, 255, 0.185);
+        backdrop-filter: blur(16px);
+        padding: 10px 8px;
+        display: flex;
+
+        aside {
+            border-radius: 28px;
+            background: linear-gradient(rgba(105, 105, 105, 0.112), rgba(105, 105, 105, 0.28)) border-box;
+            padding: 10px;
+            margin: 5px 0;
+            width: 18%;
+
+            h3 {
+                margin: 10px;
+            }
+
+            .vehicle {
+                display: flex;
+                border: 2px solid rgba(255, 255, 255, 0.185);
+                border-radius: 15px;
+                margin-bottom: 15px;
+                padding: 5px 0 10px 0;
+
+                .data {
+                    p {
+                        font-weight: lighter;
+                        margin: 0;
+                        padding: 0 12px;
+                    }
+                }
+
+                .capacity {
+                    letter-spacing: 1.5px;
+                    background: rgba(16, 185, 129, 0.20);
+                    height: max-content;
+                    border-radius: 5px;
+                    margin: auto;
+
+                    p {
+                        margin: 5px 3px;
+                        color: #10B981;
+                    }
+                }
+            }
+
+            app-dynamic-button {
+                margin-top: 100%;
+            }
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            margin: 0px 10px;
+
+            .button-search {
+                margin: 20px 0;
+                display: flex;
+                gap: 25px;
+            }
+        }
+    }
+}
