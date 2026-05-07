@@ -1,22 +1,29 @@
-<main>
+<!-- <main>
     <app-side-menu></app-side-menu>
 
     <section>
         <div class="up-section">
             <div class="up-info-block">
-
+                <p>Trabalhadores Ativos</p>
+                <h2>{{homePageData?.employees?.activeRate}}%</h2>
+                <p-progressbar [showValue]="false" [color]="'rgba(79, 78, 229, 0.93)'"  [value]="homePageData?.employees?.activeRate" />
             </div>
 
             <div class="up-info-block">
-
+                <p>Taxa de Ocupação</p>
+                <h2>{{homePageData?.housingOccupation?.occupancyRate}}%</h2>
+                <p-progressbar [showValue]="false" [color]="'rgba(79, 78, 229, 0.93)'" [value]="homePageData?.housingOccupation?.occupancyRate" />
             </div>
 
             <div class="up-info-block">
-
+                <p>Veículos Disponíveis</p>
+                <h2>{{homePageData?.vehicleDisponibility?.availabilityRate}}%</h2>
+                <p-progressbar [showValue]="false" [color]="'rgba(79, 78, 229, 0.93)'" [value]="homePageData?.vehicleDisponibility?.availabilityRate" />
             </div>
 
-            <div class="up-info-block">
-
+            <div class="up-info-block" style="border-color: #FF5A5F; background: linear-gradient(rgba(104, 25, 25, 0.28), rgba(104, 25, 25, 0.28)) border-box;">
+                <p>Alertas Ativos</p>
+                <h2>{{homePageData?.alerts?.totalActive}}</h2>
             </div>
         </div>
 
@@ -26,4 +33,116 @@
             <div class="down-info-block"></div>
         </div>
     </section>
+</main> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<main>
+  <app-side-menu></app-side-menu>
+  <section>
+    <div class="up-section">
+      <div class="up-info-block">
+        <div class="block-header">
+          <span class="block-icon workers"><i class="pi pi-users"></i></span>
+          <p>Trabalhadores Ativos</p>
+        </div>
+        <h2>{{ homePageData?.employees?.activeRate }}%</h2>
+        <p-progressbar [showValue]="false" [color]="'#5B5BD6'" [value]="homePageData?.employees?.activeRate" />
+      </div>
+
+      <div class="up-info-block">
+        <div class="block-header">
+          <span class="block-icon occupation"><i class="pi pi-building"></i></span>
+          <p>Taxa de Ocupação</p>
+        </div>
+        <h2>{{ homePageData?.housingOccupation?.occupancyRate }}%</h2>
+        <p-progressbar [showValue]="false" [color]="'#3B82F6'" [value]="homePageData?.housingOccupation?.occupancyRate" />
+      </div>
+
+      <div class="up-info-block">
+        <div class="block-header">
+          <span class="block-icon vehicles"><i class="pi pi-car"></i></span>
+          <p>Veículos Disponíveis</p>
+        </div>
+        <h2>{{ homePageData?.vehicleDisponibility?.availabilityRate }}%</h2>
+        <p-progressbar [showValue]="false" [color]="'#22C55E'" [value]="homePageData?.vehicleDisponibility?.availabilityRate" />
+      </div>
+
+      <div class="up-info-block alert-block">
+        <div class="block-header">
+          <span class="block-icon alerts"><i class="pi pi-exclamation-triangle"></i></span>
+          <p>Alertas Ativos</p>
+        </div>
+        <h2>{{ homePageData?.alerts?.totalActive }}</h2>
+        <span class="alert-critical">{{ homePageData?.alerts?.criticalCount }} Crítico</span>
+      </div>
+    </div>
+
+    <div class="bottom-section">
+        <!-- Alertas Inteligentes -->
+        <div class="bottom-block alert-card">
+            <div class="block-title">
+            <div>
+                <h3>Alertas Inteligentes</h3>
+                <p class="alert-label">Atenção necessária</p>
+            </div>
+            </div>
+            <ul class="alert-list">
+            <li class="alert-item critical" *ngFor="let alert of smartAlerts">
+                <span class="alert-dot" [ngClass]="alert.severity"><i [class]="alert.icon"></i></span>
+                <div class="alert-content">
+                <strong>{{ alert.title }}</strong>
+                <p>{{ alert.description }}</p>
+                </div>
+                <span class="activity-time">{{ alert.time }}</span>
+            </li>
+            </ul>
+        </div>
+
+        <!-- Ações Rápidas -->
+        <div class="bottom-block">
+            <div class="block-title">
+            <div>
+                <h3>Ações Rápidas</h3>
+                <p>Acesso rápido às principais funções</p>
+            </div>
+            </div>
+            <div class="quick-actions-grid">
+            <button class="action-btn purple"><i class="pi pi-plus"></i><span>Novo Funcionário</span></button>
+            <button class="action-btn blue"><i class="pi pi-car"></i><span>Novo Veículo</span></button>
+            <button class="action-btn teal"><i class="pi pi-building"></i><span>Novo Alojamento</span></button>
+            <button class="action-btn green"><i class="pi pi-arrow-right-arrow-left"></i><span>Iniciar Alocação</span></button>
+            <button class="action-btn indigo"><i class="pi pi-file"></i><span>Gerar Relatório</span></button>
+            <button class="action-btn violet"><i class="pi pi-user-plus"></i><span>Vincular Funcionário</span></button>
+            </div>
+        </div>
+        </div>
+  </section>
 </main>

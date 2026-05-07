@@ -1,69 +1,287 @@
+// main {
+//     margin: 50px;
+//     display: flex;
+
+//     section {
+//         margin-left: 50px;
+//         width: 100% !important;
+//         min-width: unset !important;
+//         max-width: unset !important;
+//         height: 80vh;
+
+//         .up-section {
+//             display: flex;
+//             justify-content: space-between;
+//             margin: 0px 0px 30px 0px;
+//             height: 30%;
+//             gap: 30px;
+
+//             .up-info-block {
+//                 display: flex;
+//                 flex-direction: column;
+//                 width: 100%;
+//                 height: 190px;
+//                 justify-content: flex-end;
+//                 align-items: center;
+//                 background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
+//                 border-radius: 28px;           
+//                 border: 1.5px solid rgba(255, 255, 255, 0.185);
+//                 backdrop-filter: blur(16px);
+//                 padding: 10px;
+
+//                 p, h2 {
+//                     margin: auto;
+//                 }
+
+//                 h2 {
+//                     font-size: 96px;
+//                     font-weight: 600;
+//                 }
+
+//                 p-progressbar {
+//                     width: 80%;
+//                     height: 10px;
+//                     margin-bottom: 10px;
+//                 }
+//             }
+//         }
+
+//         .down-section {
+//             display: flex;
+//             justify-content: space-between;
+//             margin: 0px;
+//             height: 65%;
+//             gap: 30px;
+
+//             .down-info-block {
+//                 display: flex;
+//                 width: 100%;
+//                 height: 415px;  
+//                 justify-content: flex-end;
+//                 align-items: center;
+
+//                 background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
+//                 border-radius: 28px;           
+//                 border: 1.5px solid rgba(255, 255, 255, 0.185);
+//                 backdrop-filter: blur(16px);
+//             }
+//         }
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 main {
-    margin: 50px;
+  margin: 50px;
+  display: flex;
+
+  section {
+    margin-left: 50px;
+    width: 100%;
     display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+}
 
-    section {
-        margin-left: 50px;
+// Cards superiores
+.up-section {
+  display: flex;
+  gap: 20px;
+  height: 40%;
+}
 
-        // border: 2px red solid;
-        // border-radius: 28px; 
+.up-info-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
+  border-radius: 28px;           
+  border: 1.5px solid rgba(255, 255, 255, 0.185);
+  backdrop-filter: blur(16px);
 
-        width: 100% !important;
-        min-width: unset !important;
-        max-width: unset !important;
-        height: 80vh;
-        // padding: 10px 8px;
+  h2 {
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1;
+  }
 
-        .up-section {
-            display: flex;
-            justify-content: space-between;
-            margin: 0px 0px 30px 0px;
+  p { margin: 0; font-size: 15px; color: white; }
 
-            // border: 2px red solid;
-            // border-radius: 28px; 
+  p-progressbar {
+    width: 100%;
+    height: 6px;
+  }
 
-            height: 30%;
-            gap: 30px;
+  
+}
 
-            .up-info-block {
-                display: flex;
-                // width: 220px;
-                width: 100%;
-                height: 190px;
-                justify-content: flex-end;
-                align-items: center;
+.alert-block {
+  border-color: rgba(255, 90, 95, 0.5);
+  background: rgba(104, 25, 25, 0.2);
+}
 
-                background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
-                border-radius: 28px;           
-                border: 1.5px solid rgba(255, 255, 255, 0.185);
-                backdrop-filter: blur(16px);
-            }
-        }
+.block-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-        .down-section {
-            display: flex;
-            justify-content: space-between;
-            margin: 0px;
+.block-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
 
-            // border: 2px red solid;
-            // border-radius: 28px; 
+  &.workers    { background: rgba(91, 91, 214, 0.25); color: #8B8BF0; }
+  &.occupation { background: rgba(59, 130, 246, 0.25); color: #60A5FA; }
+  &.vehicles   { background: rgba(34, 197, 94, 0.25); color: #4ADE80; }
+  &.alerts     { background: rgba(239, 68, 68, 0.25); color: #F87171; }
+}
 
-            height: 65%;
-            gap: 30px;
+.block-sub {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 12px;
+}
 
-            .down-info-block {
-                display: flex;
-                // width: 660px;
-                width: 100%;
-                height: 415px;  
-                justify-content: flex-end;
-                align-items: center;
+.alert-critical {
+  font-size: 12px;
+  color: #F87171;
+  font-weight: 600;
+}
 
-                background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
-                border-radius: 28px;           
-                border: 1.5px solid rgba(255, 255, 255, 0.185);
-                backdrop-filter: blur(16px);
-            }
-        }
-    }
+.trend-up   { color: #4ADE80; }
+.trend-down { color: #F87171; }
+
+.block-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  h3 { margin: 0; font-size: 17px; font-weight: 600; }
+  p  { margin: 4px 0 0; font-size: 14px; color: rgba(255,255,255,0.5); }
+}
+
+// Atividades
+.activity-time {
+  font-size: 13px; color: rgba(255,255,255,0.35);
+  white-space: nowrap;
+}
+
+.bottom-section {
+  display: flex;
+  gap: 20px;
+  height: 100%;
+}
+
+.bottom-block {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px;
+  background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
+  border-radius: 28px;           
+  border: 1.5px solid rgba(255, 255, 255, 0.185);
+  backdrop-filter: blur(16px);
+
+  &.alert-card {
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(104, 25, 25, 0.15);
+  }
+}
+
+.alert-label {
+  color: #F87171 !important;
+  font-weight: 600;
+}
+
+.alert-list {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+.alert-item {
+  display: flex; align-items: flex-start; gap: 12px;
+
+  .alert-dot {
+    width: 48px; height: 48px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+
+    &.critical { background: rgba(239,68,68,0.2); color: #F87171; }
+    &.warning  { background: rgba(251,191,36,0.2); color: #FBBF24; }
+  }
+
+  .alert-content {
+    flex: 1;
+    strong { font-size: 16px; font-weight: 500; }
+    p { margin: 2px 0 0; font-size: 14px; color: rgba(255,255,255,0.45); }
+  }
+}
+
+// Ações Rápidas
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.action-btn {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px; padding: 16px 8px;
+  border-radius: 14px; border: none;
+  cursor: pointer; font-size: 11px;
+  font-weight: 500; color: #fff;
+  transition: transform 0.15s, opacity 0.15s;
+  background-color: transparent;
+
+  i { font-size: 20px; }
+  &:hover { transform: translateY(-2px); opacity: 0.85; }
+
+  &.purple { background: rgba(91, 91, 214, 0.4); }
+  &.blue   { background: rgba(59, 130, 246, 0.4); }
+  &.teal   { background: rgba(20, 184, 166, 0.4); }
+  &.green  { background: rgba(34, 197, 94, 0.4); }
+  &.indigo { background: rgba(99, 102, 241, 0.4); }
+  &.violet { background: rgba(139, 92, 246, 0.4); }
 }

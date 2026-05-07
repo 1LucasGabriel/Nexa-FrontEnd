@@ -128,9 +128,9 @@ export class EmployeeManagementPage {
   ];
 
   statusColorMap = {
-    0: { color: '#22c55e', label: 'Ativo' },
-    1: { color: '#f59e0b', label: 'Em Férias' },
-    2: { color: '#ef4444', label: 'Demitido' },
+    1: { color: '#22c55e', label: 'Ativo' },
+    2: { color: '#f59e0b', label: 'Em Férias' },
+    3: { color: '#ef4444', label: 'Demitido' },
   };
 
   public handleAction(event: { action: string; item: any }) {

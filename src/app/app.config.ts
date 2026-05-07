@@ -6,6 +6,7 @@ import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
+import { LOCALE_ID } from '@angular/core';
 
 const MyPreset = definePreset(Aura, {
   components: {
@@ -23,6 +24,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
     providePrimeNG({
       theme: { preset: MyPreset },
       translation: {
