@@ -1,0 +1,75 @@
+<!-- <div class="page-wrapper">
+
+  <app-side-menu
+    [userName]="userName"
+    [userRole]="userRole"
+  />
+
+  <div class="main-content">
+
+    <div class="table-card">
+
+      <div class="section-header">
+        <div class="section-title">
+          <h2>Alojamentos</h2>
+          <span class="section-subtitle">Gestão de unidades de Alojamento</span>
+        </div>
+
+        <div class="section-actions">
+          <p-button
+            label="Adicionar Alojamento"
+            (onClick)="abrirModal()"
+          />
+
+          <p-iconfield class="search-field">
+            <p-inputicon styleClass="pi pi-search" />
+            <input
+              pInputText
+              type="text"
+              placeholder="Pesquisar..."
+              [(ngModel)]="searchTerm"
+            />
+          </p-iconfield>
+        </div>
+      </div>
+
+      <app-dynamic-table
+        [columns]="columns"
+        [data]="alojamentosFiltrados"
+        [actions]="actions"
+        [statusColorMap]="statusColorMap"
+        dataKey="id"
+        (onAction)="onAction($event)"
+      />
+
+    </div>
+
+  </div>
+
+  <app-dynamic-modal
+    [(visible)]="modalVisible"
+    [config]="modalConfig"
+    (confirm)="onConfirm($event)"
+  />
+
+</div> -->
+
+<main>
+    <app-side-menu></app-side-menu>
+
+    <section>
+        <div class="header-section">
+            <h1>Cadastrar Alojamentos</h1>
+
+            <div class="button-search">
+                <app-dynamic-button [isRounded]="true"></app-dynamic-button>
+                <app-dynamic-search-bar></app-dynamic-search-bar>
+            </div>
+        </div>
+
+        <app-dynamic-table [columns]="columns" [data]="originalData" [totalRecords]="originalData.length" [actions]="actions" (onAction)="handleAction($event)" [statusColorMap]="statusColorMap"></app-dynamic-table>
+    </section>
+
+    <p-confirmdialog />
+    <app-dynamic-modal [title]="modalConfig.title" [initialData]="selectedAlojamento" [config]="modalConfig" [visible]="isModalOpen" (visibleChange)="onModalVisibilityChange($event)" (confirm)="onConfirm($event)"></app-dynamic-modal>
+</main>
