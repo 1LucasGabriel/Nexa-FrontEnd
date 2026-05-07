@@ -31,6 +31,11 @@ export const routes: Routes = [
         title: 'Nexa - Gestão de Frotas',
         loadComponent: () => import('./pages/fleet-management-page/fleet-management-page').then(m => m.FleetManagementPage)
     },
+    {
+        path: 'employee-vehicle-allocation',
+        title: 'Nexa - Alocação de Veículos',
+        loadComponent: () => import('./pages/employee-vehicle-allocation-page/employee-vehicle-allocation-page').then(m => m.EmployeeVehicleAllocationPage)
+    },
     { 
         path: '**', 
         redirectTo: 'login', 

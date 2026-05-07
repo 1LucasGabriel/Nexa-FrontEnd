@@ -18,6 +18,7 @@ export class MapCard implements AfterViewInit, OnChanges {
   @Input() destination!: [number, number];
   @Input() originLabel: string = '';
   @Input() destinationLabel: string = '';
+  @Input() locked: boolean = false;
 
   private map!: L.Map;
   private routeLayer?: L.Polyline;
@@ -47,13 +48,29 @@ export class MapCard implements AfterViewInit, OnChanges {
     this.map = L.map(this.mapContainer.nativeElement, {
       zoomControl: false,
       attributionControl: false,
+      dragging: !this.locked,
+      scrollWheelZoom: !this.locked,
+      doubleClickZoom: !this.locked,
+      touchZoom: !this.locked,
+      boxZoom: !this.locked,
+      keyboard: !this.locked,
+      zoomSnap: this.locked ? 0 : 1,
     }).setView(center, 8);
 
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       maxZoom: 19,
     }).addTo(this.map);
 
-    L.control.zoom({ position: 'bottomright' }).addTo(this.map);
+    if (!this.locked) {
+      L.control.zoom({ position: 'bottomright' }).addTo(this.map);
+    } else {
+      this.map.touchZoom.disable();
+      this.map.doubleClickZoom.disable();
+      this.map.scrollWheelZoom.disable();
+      this.map.boxZoom.disable();
+      this.map.keyboard.disable();
+      this.map.dragging.disable();
+    }
   }
 
   private clearRoute() {
