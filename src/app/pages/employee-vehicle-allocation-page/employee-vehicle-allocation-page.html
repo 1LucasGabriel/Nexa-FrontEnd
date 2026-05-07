@@ -1,32 +1,125 @@
 <main>
     <app-side-menu></app-side-menu>
 
-    <section>
-        <aside>
-            <h3>Veículos</h3>
-
-            <div class="vehicle">
-                <div class="data">
-                    <p-chip label="LWUW-7M7" icon="pi pi-circle-fill" />
-                    <p>Sprinter</p>
-                </div>
-
-                <div class="capacity">
-                    <p>03/12</p>
+    <section class="main-container">
+        <aside class="vehicle-list-sidebar">
+            <h3 class="sidebar-title">VEÍCULOS</h3>
+            
+            <div class="vehicles-wrapper">
+                <div *ngFor="let vehicle of vehicles" class="vehicle-card" [class.active]="selectedVehicle.id === vehicle.id" (click)="selectVehicle(vehicle)">
+                    <div class="data">
+                        <i class="pi pi-circle-fill status-dot" [class.available]="vehicle.status === 'available'"></i>
+                        <span class="plate">{{vehicle.plate}}</span>
+                        <p class="model">{{vehicle.model}}</p>
+                    </div>
+                    <div class="capacity" [class.active-capacity]="selectedVehicle.id === vehicle.id">
+                        <p>{{vehicle.occupied | number:'2.0-0'}} / {{vehicle.capacity | number:'2.0-0'}}</p>
+                    </div>
                 </div>
             </div>
 
-            <app-dynamic-button [text]="textButton" [width]="widthButton"></app-dynamic-button>
+            <div class="sidebar-footer">
+                <button class="add-vehicle-btn">{{textButton}}</button>
+            </div>
         </aside>
 
-        <div class="header-section">
-            <h1>Alocação Funcionários/Veículos</h1>
+        <div class="content-area">
+            <div class="header-section">
+                <h1>Alocação Funcionários/Veículos</h1>
+                
+                <div class="route-inputs">
+                    <div class="input-group">
+                        <i class="pi pi-map-marker icon"></i>
+                        <input type="text" pInputText placeholder="Endereço Origem" class="route-input"/>
+                    </div>
+                    <i class="pi pi-arrow-right arrow-icon"></i>
+                    <div class="input-group">
+                        <input type="text" pInputText placeholder="Endereço Destino" class="route-input"/>
+                    </div>
+                    <button class="edit-route-btn"><i class="pi pi-pencil"></i> Editar Rota</button>
+                </div>
+            </div>
 
-            <div class="button-search">
+            <div class="map-section">
+                <app-map-card [origin]="origin" [locked]="true" [destination]="destination" height="100%" width="100%" originLabel="Origem" destinationLabel="Destino"></app-map-card>
+            </div>
+
+            <div class="bottom-split">
+                <div class="employees-column">
+                    <div class="col-header">
+                        <div class="col-title">
+                            <i class="pi pi-users"></i>
+                            <h3>Funcionários no Veículo</h3>
+                        </div>
+                        <div class="capacity-pill">
+                            <span class="active-text">{{selectedVehicle.occupied}}</span> / {{selectedVehicle.capacity}}
+                        </div>
+                    </div>
+                    
+                    <div class="table-header">
+                        <span class="th-name">NOME</span>
+                        <span class="th-cpf">CPF</span>
+                        <span class="th-action"></span>
+                    </div>
+                    
+                    <div class="employee-list">
+                        <div class="employee-item" *ngFor="let emp of employeesInVehicle">
+                            <div class="emp-info">
+                                <p-avatar [label]="emp.initials" shape="circle" styleClass="emp-avatar"></p-avatar>
+                                <span class="emp-name">{{emp.name}}</span>
+                            </div>
+                            <span class="emp-cpf">{{emp.cpf}}</span>
+                            <div class="emp-actions">
+                                <button class="action-btn edit"><i class="pi pi-pencil"></i></button>
+                                <button class="action-btn delete"><i class="pi pi-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="add-emp-btn">+ Adicionar Funcionário</button>
+                </div>
+
+                <div class="vehicle-details-column">
+                    <div class="vehicle-info-card">
+                        <div class="card-header">
+                            <div class="v-title">
+                                <i class="pi pi-car car-icon"></i>
+                                <div>
+                                    <h2>{{selectedVehicle.plate}}</h2>
+                                    <p>{{selectedVehicle.model}}</p>
+                                </div>
+                            </div>
+                            <div class="v-status">
+                                <i class="pi pi-circle-fill"></i> Disponível
+                            </div>
+                        </div>
+
+                        <div class="card-details">
+                            <div class="detail-row">
+                                <span class="label"><i class="pi pi-users icon"></i> Capacidade</span>
+                                <span class="value">{{selectedVehicle.capacity}} lugares</span>
+                            </div>
+                            <div class="detail-row occ-row">
+                                <span class="label">Ocupação</span>
+                                <span class="value"><strong class="highlight-green">{{selectedVehicle.occupied}} / {{selectedVehicle.capacity}}</strong> ocupados</span>
+                            </div>
+                            <p-progressBar [value]="(selectedVehicle.occupied / selectedVehicle.capacity) * 100" [showValue]="false"></p-progressBar>
+                        </div>
+
+                        <div class="info-box">
+                            <i class="pi pi-users info-icon"></i>
+                            <div class="info-texts">
+                                <h4>{{selectedVehicle.capacity - selectedVehicle.occupied}} lugares disponíveis</h4>
+                                <p>Você pode adicionar mais {{selectedVehicle.capacity - selectedVehicle.occupied}} funcionários.</p>
+                            </div>
+                        </div>
+
+                        <button class="start-journey-btn">
+                            <i class="pi pi-play play-icon"></i> Iniciar Viagem
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-<!-- 
-    <p-confirmdialog />
-    <app-dynamic-modal [title]="modalTitle" [initialData]="selectedEmployee" [config]="config" [visible]="isModalOpen" (visibleChange)="onModalVisibilityChange($event)" (confirm)="onConfirm($event)"></app-dynamic-modal> -->
 </main>
