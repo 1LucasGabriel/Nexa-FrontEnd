@@ -1,14 +1,19 @@
 import { VehicleTripStatus } from "../enums/vehicle-trip-status";
-import { VehicleAllocation } from "./vehicle-allocation";
+import { Vehicle } from "./vehicle";
+import { VehicleTripEmployee } from "./vehicle-trip-employee";
 
 export interface VehicleTrip {
-    id: number,
-    vehicleAllocationId: number,
-    vehicleAllocation?: VehicleAllocation,
-    origin: string,
-    destination: string,
-    startDate: Date,
-    endDate?: Date,
-    vehicleTripStatus: VehicleTripStatus,
-    distance: number
+    id: number;
+    driverId: number;
+    vehicleId: number;
+    originAddressId: number;
+    destinationAddressId: number;
+    startDate: string;
+    endDate?: string | null;
+    status: VehicleTripStatus;
+    distance: number;
+    description: string;
+    currentOcupation: number;
+    vehicle?: Vehicle;
+    listVehicleTripEmployee?: VehicleTripEmployee[];
 }

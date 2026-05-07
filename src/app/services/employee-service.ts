@@ -8,7 +8,7 @@ import { CreateUpdateEmployeeDTO } from '../dtos/create-update-employee-dto';
 })
 export class EmployeeService {
   private http = inject(HttpClient)
-  private urlAPI = 'http://localhost:5102/api/employees'
+  private urlAPI = 'https://localhost:8081/api/employees'
 
   public getEmployees() {
     const url = `${this.urlAPI}`

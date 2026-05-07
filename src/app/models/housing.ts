@@ -1,12 +1,14 @@
 import { HousingStatus } from "../enums/housing-status";
+import { Address } from "./address";
 
 export interface Housing {
-    id: number,
-    name: string,
-    address: string,
-    city: string,
-    zipCode: string,
-    maxCapacity: number,
-    currentCapacity: number,
-    housingStatus: HousingStatus
+    id: number;
+    name: string;
+    addressId: number;
+    maxCapacity: number;
+    currentCapacity: number;
+    housingStatus: HousingStatus;
+    housingType: number;
+    useHousingRoom: boolean;
+    address?: Address;
 }

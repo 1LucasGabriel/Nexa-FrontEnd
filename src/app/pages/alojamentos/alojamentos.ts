@@ -1,10 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -15,20 +9,13 @@ import { DynamicModal, ModalConfig, ModalFieldType } from '../../components/dyna
 import { DynamicButton } from '../../components/dynamic-button/dynamic-button';
 import { DynamicSearchBar } from '../../components/dynamic-search-bar/dynamic-search-bar';
 
-// import { AlojamentoService } from '../../services/alojamento-service';
-// import { Alojamento } from '../../models/alojamento';
-// import { CreateUpdateAlojamentoDTO } from '../../dtos/create-update-alojamento-dto';
+import { HousingService } from '../../services/housing.service';
+import { Housing } from '../../models/housing';
 
 @Component({
   selector: 'app-alojamento',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    InputTextModule,
-    ButtonModule,
-    IconFieldModule,
-    InputIconModule,
     SideMenu,
     DynamicTable,
     DynamicModal,
@@ -44,23 +31,20 @@ import { DynamicSearchBar } from '../../components/dynamic-search-bar/dynamic-se
 export class Alojamento {
 
   // ─── Injeções ─────────────────────────────────────────────
-  private messageService     = inject(MessageService);
+  private messageService      = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
-  // private alojamentoService = inject(AlojamentoService);
-
-  // ─── Usuário ──────────────────────────────────────────────
-  userName = 'Usuário';
-  userRole = 'Administrador';
+  private housingService      = inject(HousingService);
 
   // ─── Estado ───────────────────────────────────────────────
-  isEditMode       = false;
+  isEditMode              = false;
   selectedAlojamento: any = null;
-  isModalOpen      = false;
-  loading          = false;
-  totalRecords     = 0;
-  rows             = 10;
-  originalData: any[] = [];
-  filteredData: any[] = [];
+  isModalOpen             = false;
+  loading                 = false;
+  totalRecords            = 0;
+  rows                    = 10;
+  originalData: any[]     = [];
+  filteredData: any[]     = [];
+  buttonText              = 'Adicionar Alojamento';
 
   // ─── Ciclo de vida ────────────────────────────────────────
   ngAfterViewInit() {
@@ -69,52 +53,66 @@ export class Alojamento {
 
   // ─── CRUD ─────────────────────────────────────────────────
   public getAlojamentos() {
-    // this.alojamentoService.getAlojamentos().subscribe({
-    //   next: (value) => {
-    //     this.originalData = value;
-    //     this.filteredData = [...value];
-    //   },
-    //   error: () => {
-    //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao buscar alojamentos. Tente novamente' });
-    //   }
-    // });
-
-    // Dados mockados — remover quando integrar a API:
-    this.originalData = [
-      { id: 1, status: 'disponivel', endereco: 'Av. Washington Luiz, 363', cidade: 'São Paulo - BR', cep: '19842-685', capacidade: 7,  ocupacao: 7,  tipo: 'Masculino' },
-      { id: 2, status: 'disponivel', endereco: 'Av. Rio Branco, 82',       cidade: 'Marília - BR',   cep: '19502-080', capacidade: 31, ocupacao: 12, tipo: 'Misto'     },
-      { id: 3, status: 'lotado',     endereco: 'Ld. Luís de Camões, 191',  cidade: 'Lisboa - PT',    cep: '1000-017',  capacidade: 20, ocupacao: 20, tipo: 'Masculino' },
-      { id: 4, status: 'disponivel', endereco: 'R. Palestra Itália, 200',  cidade: 'São Paulo - BR', cep: '05001-200', capacidade: 15, ocupacao: 14, tipo: 'Feminino'  },
-    ];
-    this.filteredData = [...this.originalData];
+    this.housingService.getHousings().subscribe({
+      next: (value: Housing[]) => {
+        const formattedData = value.map(h => ({
+          id: h.id,
+          nome: h.name,
+          status: h.housingStatus === 0 ? 'disponivel' : 'lotado',
+          endereco: h.address ? `${h.address.street}, ${h.address.number || 'S/N'}` : 'N/A',
+          cidade: h.address ? `${h.address.city} - ${h.address.state || 'BR'}` : 'N/A',
+          cep: h.address?.zipCode || 'N/A',
+          capacidade: h.maxCapacity,
+          ocupacao: h.currentCapacity,
+          tipo: h.housingType === 1 ? 'Masculino' : h.housingType === 2 ? 'Feminino' : 'Misto'
+        }));
+        this.originalData = formattedData;
+        this.filteredData = [...formattedData];
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao buscar alojamentos. Tente novamente' });
+      }
+    });
   }
 
   public createAlojamento(dados: any) {
-    // this.alojamentoService.postAlojamento(dados).subscribe({
-    //   next: () => {
-    //     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Alojamento criado com sucesso!' });
-    //     this.getAlojamentos();
-    //   },
-    //   error: () => {
-    //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar alojamento. Tente novamente' });
-    //   }
-    // });
-    console.log('Criar alojamento:', dados);
-    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Alojamento criado com sucesso!' });
+    const payload = {
+      name: dados.nome,
+      addressId: 1,
+      maxCapacity: dados.capacidade,
+      housingType: dados.tipo === 'masculino' ? 1 : (dados.tipo === 'feminino' ? 2 : 3),
+      useHousingRoom: true
+    };
+
+    this.housingService.postHousing(payload).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Alojamento criado com sucesso!' });
+        this.getAlojamentos();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar alojamento. Tente novamente' });
+      }
+    });
   }
 
   public editAlojamento(dados: any) {
-    // this.alojamentoService.putAlojamento(dados.id, dados).subscribe({
-    //   next: () => {
-    //     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Alojamento editado com sucesso!' });
-    //     this.getAlojamentos();
-    //   },
-    //   error: () => {
-    //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao editar alojamento. Tente novamente' });
-    //   }
-    // });
-    console.log('Editar alojamento:', dados);
-    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Alojamento editado com sucesso!' });
+    const payload = {
+      name: dados.nome,
+      addressId: 1,
+      maxCapacity: dados.capacidade,
+      housingType: dados.tipo === 'masculino' ? 1 : (dados.tipo === 'feminino' ? 2 : 3),
+      useHousingRoom: true
+    };
+
+    this.housingService.putHousing(dados.id, payload).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Alojamento editado com sucesso!' });
+        this.getAlojamentos();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao editar alojamento. Tente novamente' });
+      }
+    });
   }
 
   public confirmDelete(item: any) {
@@ -130,17 +128,15 @@ export class Alojamento {
   }
 
   public deleteAlojamento(item: any) {
-    // this.alojamentoService.deleteAlojamento(item.id).subscribe({
-    //   next: () => {
-    //     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Alojamento excluído com sucesso!' });
-    //     this.getAlojamentos();
-    //   },
-    //   error: () => {
-    //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir alojamento. Tente novamente' });
-    //   }
-    // });
-    console.log('Excluir alojamento:', item);
-    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Alojamento excluído com sucesso!' });
+    this.housingService.deleteHousing(item.id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Alojamento excluído com sucesso!' });
+        this.getAlojamentos();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir alojamento. Tente novamente' });
+      }
+    });
   }
 
   // ─── Modal ────────────────────────────────────────────────
@@ -148,64 +144,52 @@ export class Alojamento {
     return this.isEditMode ? 'Editar Alojamento' : 'Adicionar Alojamento';
   }
 
-  modalConfig: ModalConfig = {
-    title: 'Adicionar Alojamento',
-    width: '560px',
+  config: ModalConfig = {
+    title: this.modalTitle,
+    width: '740px',
     confirmLabel: 'Salvar',
-    cancelLabel: 'Cancelar',
+    cancelLabel: 'Voltar',
     fields: [
+      {
+        key: 'nome',
+        label: 'Nome',
+        type: ModalFieldType.Text,
+        required: true,
+        placeholder: 'Digite o nome do alojamento',
+        width: '30%',
+      },
       {
         key: 'endereco',
         label: 'Endereço',
+        icon: 'pi pi-map-marker',
         type: ModalFieldType.Text,
         required: true,
-        placeholder: 'Ex: Av. Paulista, 1000',
-      },
-      {
-        key: 'cidade',
-        label: 'Cidade',
-        type: ModalFieldType.Text,
-        required: true,
-        placeholder: 'Ex: São Paulo - BR',
-        halfWidth: true,
-      },
-      {
-        key: 'cep',
-        label: 'CEP',
-        type: ModalFieldType.Text,
-        required: true,
-        placeholder: '00000-000',
-        halfWidth: true,
-      },
-      {
-        key: 'capacidade',
-        label: 'Capacidade',
-        type: ModalFieldType.InputNumber,
-        required: true,
-        min: 1,
-        halfWidth: true,
+        placeholder: 'Digite o endereço',
+        width: '65%',
       },
       {
         key: 'tipo',
         label: 'Tipo',
+        icon: 'pi pi-home',
         type: ModalFieldType.Select,
         required: true,
-        halfWidth: true,
+        placeholder: 'Selecione o tipo',
+        width: '45%',
         options: [
-          { label: 'Masculino', value: 'masculino' },
-          { label: 'Feminino',  value: 'feminino'  },
-          { label: 'Misto',     value: 'misto'     },
+          { label: 'Masculino', value: 'masculino', color : '#3b82f6' },
+          { label: 'Feminino',  value: 'feminino',  color: '#ec4899' },
+          { label: 'Misto',     value: 'misto',     color: '#8b5cf6' },
         ],
       },
       {
-        key: 'status',
-        label: 'Status',
-        type: ModalFieldType.Select,
+        key: 'capacidade',
+        label: 'Capacidade',
+        icon: 'pi pi-users',
+        type: ModalFieldType.InputNumber,
         required: true,
-        options: [
-          { label: 'Disponível', value: 'disponivel' },
-          { label: 'Lotado',     value: 'lotado'     },
-        ],
+        placeholder: '0',
+        min: 0,
+        width: '49%',
       },
     ],
   };
@@ -213,14 +197,12 @@ export class Alojamento {
   public openAddModal() {
     this.isEditMode = false;
     this.selectedAlojamento = null;
-    this.modalConfig = { ...this.modalConfig, title: 'Adicionar Alojamento' };
     this.isModalOpen = true;
   }
 
   public openEditModal(item: any) {
     this.isEditMode = true;
     this.selectedAlojamento = item;
-    this.modalConfig = { ...this.modalConfig, title: 'Editar Alojamento' };
     this.isModalOpen = true;
   }
 
@@ -244,6 +226,7 @@ export class Alojamento {
   // ─── Tabela ───────────────────────────────────────────────
   columns: TableColumn[] = [
     { fieldAPI: 'status',     header: 'Status',   type: 'status', width: '120px' },
+    { fieldAPI: 'nome',       header: 'Nome',                     width: '120px' },
     { fieldAPI: 'endereco',   header: 'Endereço'                                 },
     { fieldAPI: 'cidade',     header: 'Cidade',                   width: '140px' },
     { fieldAPI: 'cep',        header: 'CEP',                      width: '110px' },
@@ -253,19 +236,22 @@ export class Alojamento {
   ];
 
   actions: TableAction[] = [
-    { label: 'Editar',  icon: 'pi pi-pencil', action: 'editar',  buttonClass: 'p-button-text p-button-sm' },
-    { label: 'Excluir', icon: 'pi pi-trash',  action: 'excluir', buttonClass: 'p-button-text p-button-sm p-button-danger' },
+    { label: 'Editar',  icon: 'pi pi-pencil', action: 'edit',   buttonClass: 'p-button-text p-button-sm' },
+    { label: 'Excluir', icon: 'pi pi-trash',  action: 'delete', buttonClass: 'p-button-text p-button-sm p-button-danger' },
   ];
 
   statusColorMap = {
     disponivel: { color: '#22c55e', label: 'Disponível' },
     lotado:     { color: '#ef4444', label: 'Lotado'     },
+    masculino:   { color: '#3b82f6', label: 'Masculino'  },
+    feminino:    { color: '#ec4899', label: 'Feminino'   },
+    misto:       { color: '#8b5cf6', label: 'Misto'      },
   };
 
   public handleAction(event: { action: string; item: any }) {
     switch (event.action) {
-      case 'editar':  this.openEditModal(event.item); break;
-      case 'excluir': this.confirmDelete(event.item); break;
+      case 'edit':   this.openEditModal(event.item); break;
+      case 'delete': this.confirmDelete(event.item); break;
     }
   }
 

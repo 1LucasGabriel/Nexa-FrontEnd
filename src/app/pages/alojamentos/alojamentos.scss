@@ -128,8 +128,25 @@ main {
 
         .header-section {
             display: flex;
+            align-items: center;
             justify-content: space-between;
             margin: 0px 10px;
+
+            .title-block {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+
+                h1 {
+                    margin: 0;
+                }
+
+                p {
+                    margin: 0;
+                    font-size: 0.85rem;
+                    color: #94a3b8;
+                }
+            }
 
             .button-search {
                 margin: 20px 0;
