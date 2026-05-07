@@ -1,0 +1,19 @@
+<main>
+    <app-side-menu></app-side-menu>
+
+    <section>
+        <div class="header-section">
+            <h1>Veículo</h1>
+
+            <div class="button-search">
+                <app-dynamic-button [text]="buttonText" [isRounded]="true" (buttonClick)="openAddModal()"></app-dynamic-button>
+                <app-dynamic-search-bar placeholderColor="#ffffff" textColor="#ffffff" (onSearch)="onSearch($event)"></app-dynamic-search-bar>
+            </div>
+        </div>
+
+        <app-dynamic-table [columns]="columns" [data]="filteredData" [rows]="rows" [totalRecords]="filteredData.length" [actions]="actions" (onAction)="handleAction($event)" [statusColorMap]="statusColorMap"></app-dynamic-table>
+    </section>
+
+    <p-confirmdialog />
+    <app-dynamic-modal [title]="modalTitle" [initialData]="selectedVehicle" [config]="config" [visible]="isModalOpen" (visibleChange)="onModalVisibilityChange($event)" (confirm)="onConfirm($event)"></app-dynamic-modal>
+</main>
