@@ -21,10 +21,15 @@ export const routes: Routes = [
         title: 'Nexa - Gerenciamento de Funcionários',
         loadComponent: () => import('./pages/employee-management-page/employee-management-page').then(m => m.EmployeeManagementPage)
     },
-        {
+    {
         path: 'alojamentos',
         title: 'Nexa - Gerenciamento de Alojamentos',
         loadComponent: () => import('./pages/alojamentos/alojamentos').then(m => m.Alojamento)
+    },
+    {
+        path: 'fleet-management',
+        title: 'Nexa - Gestão de Frotas',
+        loadComponent: () => import('./pages/fleet-management-page/fleet-management-page').then(m => m.FleetManagementPage)
     },
     { 
         path: '**', 
