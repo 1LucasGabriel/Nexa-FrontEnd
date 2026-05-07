@@ -1,0 +1,158 @@
+// .page-wrapper {
+//   display: flex;
+//   height: 100vh;
+//   overflow: hidden;
+//   padding: 1.5rem;
+//   gap: 1rem;
+//   box-sizing: border-box;
+//   align-items: stretch;
+// }
+
+// .main-content {
+//   flex: 1;
+//   display: flex;
+//   flex-direction: column;
+//   overflow-y: auto;
+//   min-width: 0;
+//   height: 100%;
+// }
+
+// .section-header {
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   margin-bottom: 1.5rem;
+//   flex-wrap: wrap;
+//   gap: 1rem;
+// }
+
+// .section-title {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 0.25rem;
+
+//   h2 {
+//     margin: 0;
+//     font-size: 2rem;
+//     font-weight: 600;
+//     color: #ffffff;
+//   }
+// }
+
+// .section-subtitle {
+//   font-size: 0.8rem;
+//   color: #94a3b8;
+// }
+
+// .section-actions {
+//   display: flex;
+//   align-items: center;
+//   gap: 0.75rem;
+// }
+
+// .table-card {
+//   background: rgba(105, 105, 105, 0.28);
+//   border-radius: 20px;
+//   border: 1px solid rgba(255, 255, 255, 0.185);
+//   padding: 1.5rem;
+//   overflow: hidden;
+//   flex: 1;
+//   display: flex;
+//   flex-direction: column;
+// }
+
+// app-dynamic-table {
+//   ::ng-deep .table-container {
+//     background: transparent !important;
+//     min-height: unset;
+//     padding: 0;
+//   }
+// }
+
+// ::ng-deep p-button .p-button {
+//   background: #4F46E5 !important;
+//   border-color: #4F46E5 !important;
+//   border-radius: 30px !important;
+//   white-space: nowrap !important;
+//   color: #ffffff !important;
+// }
+
+// .search-field {
+//   ::ng-deep .p-inputtext {
+//     background: rgba(255, 255, 255, 0.08) !important;
+//     border: 1px solid rgba(255, 255, 255, 0.3) !important;
+//     border-radius: 30px !important;
+//     color: #ffffff !important;
+
+//     &::placeholder {
+//       color: rgba(255, 255, 255, 0.6) !important;
+//     }
+
+//     &:focus {
+//       box-shadow: none !important;
+//       border-color: rgba(255, 255, 255, 0.6) !important;
+//     }
+//   }
+
+//   ::ng-deep .p-inputicon {
+//     color: rgba(255, 255, 255, 0.6) !important;
+//   }
+// }
+
+// app-side-menu {
+//   ::ng-deep .menu-wrapper {
+//     height: 100%;
+//   }
+
+//   ::ng-deep .menu-custom.p-menu {
+//     height: 100% !important;
+//     min-height: unset !important;
+//   }
+// }
+main {
+    margin: 50px;
+    display: flex;
+
+    section {
+        margin-left: 50px;
+
+        width: 100% !important;
+        min-width: unset !important;
+        max-width: unset !important;
+        height: 90vh;
+        background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
+        border-radius: 28px;           
+        border: 1.5px solid rgba(255, 255, 255, 0.185);
+        backdrop-filter: blur(16px);
+        padding: 10px 8px;
+
+        .header-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0px 10px;
+
+            .title-block {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+
+                h1 {
+                    margin: 0;
+                }
+
+                p {
+                    margin: 0;
+                    font-size: 0.85rem;
+                    color: #94a3b8;
+                }
+            }
+
+            .button-search {
+                margin: 20px 0;
+                display: flex;
+                gap: 25px;
+            }
+        }
+    }
+}

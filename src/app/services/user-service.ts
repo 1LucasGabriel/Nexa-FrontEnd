@@ -7,7 +7,7 @@ import { GetUserDTO } from '../dtos/get-user-dto';
 })
 export class UserService {
   private http = inject(HttpClient)
-  private urlAPI = 'http://localhost:5102/api/users'
+  private urlAPI = 'https://localhost:8081/api/users'
 
   public getUser() {
     const url = `${this.urlAPI}`

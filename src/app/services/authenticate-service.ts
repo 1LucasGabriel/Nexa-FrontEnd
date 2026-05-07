@@ -8,7 +8,7 @@ import { InputAuthenticateDTO } from '../dtos/input-authenticate-dto';
 })
 export class AuthenticateService {
   private http = inject(HttpClient)
-  private urlAPI = 'http://localhost:5102/api/auth'
+  private urlAPI = 'https://localhost:8081/api/auth'
 
   public postLogin(data: OutputAuthenticateDTO) {
     const url = `${this.urlAPI}/login`
