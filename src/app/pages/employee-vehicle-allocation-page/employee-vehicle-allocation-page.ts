@@ -7,10 +7,12 @@ import { ChipModule } from 'primeng/chip';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { AvatarModule } from 'primeng/avatar';
 import { InputTextModule } from 'primeng/inputtext';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-employee-vehicle-allocation-page',
-  imports: [CommonModule, SideMenu, DynamicButton, MapCard, ChipModule, ProgressBarModule, AvatarModule, InputTextModule],
+  imports: [CommonModule, SideMenu, MapCard, ChipModule, ProgressBarModule, AvatarModule, InputTextModule],
+  providers: [ConfirmationService],
   templateUrl: './employee-vehicle-allocation-page.html',
   styleUrl: './employee-vehicle-allocation-page.scss',
 })

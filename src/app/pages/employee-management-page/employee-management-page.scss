@@ -8,7 +8,7 @@ main {
         width: 100% !important;
         min-width: unset !important;
         max-width: unset !important;
-        height: 80vh;
+        height: 90vh;
         background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
         border-radius: 28px;           
         border: 1.5px solid rgba(255, 255, 255, 0.185);
@@ -17,8 +17,25 @@ main {
 
         .header-section {
             display: flex;
+            align-items: center;
             justify-content: space-between;
             margin: 0px 10px;
+
+            .title-block {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+
+                h1 {
+                    margin: 0;
+                }
+
+                p {
+                    margin: 0;
+                    font-size: 0.85rem;
+                    color: #94a3b8;
+                }
+            }
 
             .button-search {
                 margin: 20px 0;

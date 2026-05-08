@@ -141,8 +141,8 @@ export class FleetManagementPage {
   ];
 
   statusColorMap = {
-    0: { color: '#22c55e', label: 'Disponível' },
     1: { color: '#3b82f6', label: 'Em Uso' },
+    2: { color: '#22c55e', label: 'Disponível' },
   };
 
   public handleAction(event: { action: string; item: any }) {

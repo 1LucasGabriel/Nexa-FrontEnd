@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { SideMenu } from "../../components/side-menu/side-menu";
 import { HomePageService } from '../../services/home-page-service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { GetHomePageDTO } from '../../dtos/get-home-page-dto';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -9,13 +9,14 @@ import { CommonModule, DatePipe } from '@angular/common';
 @Component({
   selector: 'app-home-page',
   imports: [SideMenu, ProgressBarModule, CommonModule],
-  providers: [MessageService, DatePipe],
+  providers: [MessageService, DatePipe, ConfirmationService],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
 })
 export class HomePage {
   private homePageService = inject(HomePageService);
   private messageService = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
   public homePageData: GetHomePageDTO | null = null;
 
   ngOnInit() {

@@ -1,4 +1,4 @@
 export enum VehicleStatus {
-    InUse,
-    Avaliable
+    InUse = 1,
+    Avaliable = 2
 }

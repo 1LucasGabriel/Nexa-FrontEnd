@@ -58,7 +58,7 @@ export class Alojamento {
         const formattedData = value.map(h => ({
           id: h.id,
           nome: h.name,
-          status: h.housingStatus === 0 ? 'disponivel' : 'lotado',
+          status: h.housingStatus === 1 ? 'disponivel' : 'lotado',
           endereco: h.address ? `${h.address.street}, ${h.address.number || 'S/N'}` : 'N/A',
           cidade: h.address ? `${h.address.city} - ${h.address.state || 'BR'}` : 'N/A',
           cep: h.address?.zipCode || 'N/A',

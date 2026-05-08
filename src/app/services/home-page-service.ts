@@ -7,7 +7,7 @@ import { GetHomePageDTO } from '../dtos/get-home-page-dto';
 })
 export class HomePageService {
   private http = inject(HttpClient)
-  private urlAPI = 'http://localhost:5102/api/home'
+  private urlAPI = 'https://localhost:5102/api/home'
 
   public get() {
     const url = `${this.urlAPI}`

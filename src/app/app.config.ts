@@ -5,7 +5,8 @@ import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { loadingInterceptor } from './interceptors/loading.interceptor';
 import { LOCALE_ID } from '@angular/core';
 
 const MyPreset = definePreset(Aura, {
@@ -40,6 +41,6 @@ export const appConfig: ApplicationConfig = {
       }
     }),
     provideAnimations(),
-    provideHttpClient()
+    provideHttpClient(withInterceptors([loadingInterceptor]))
   ]
 };
