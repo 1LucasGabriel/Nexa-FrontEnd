@@ -5,8 +5,10 @@ export interface Vehicle {
     id: number,
     licensePlate: string,
     vehicleModelId: number,
-    vehicleModel?: VehicleModel
+    vehicleModel?: VehicleModel,
     chassisNumber: string,
     mileage: number,
-    status: VehicleStatus
+    status: VehicleStatus,
+    vehicleCondition: number,
+    originCountry: string
 }

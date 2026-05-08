@@ -4,6 +4,7 @@ import { DynamicButton } from "../../components/dynamic-button/dynamic-button";
 import { DynamicSearchBar } from '../../components/dynamic-search-bar/dynamic-search-bar';
 import { DynamicTable, TableAction, TableColumn } from "../../components/dynamic-table/dynamic-table";
 import { DynamicModal, ModalConfig, ModalFieldType } from "../../components/dynamic-modal/dynamic-modal";
+import { VehicleService } from '../../services/vehicle-service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { VehicleStatus } from '../../enums/vehicle-status';
 import { ToastModule } from "primeng/toast";
@@ -18,6 +19,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 })
 export class FleetManagementPage {
   private messageService = inject(MessageService);
+  private vehicleService = inject(VehicleService);
   private confirmationService = inject(ConfirmationService);
   public buttonText = 'Adicionar Veículo';
   isEditMode: boolean = false;
@@ -29,8 +31,72 @@ export class FleetManagementPage {
   filteredData: any[] = [];
 
   ngAfterViewInit() {
-    this.originalData = [];
-    this.filteredData = [];
+    this.getVehicles();
+  }
+
+  public getVehicles() {
+    this.loading = true;
+    this.vehicleService.getVehicles().subscribe({
+      next: (vehicles) => {
+        const mapped = vehicles.map(v => ({
+          ...v,
+          modelo: v.vehicleModel?.model ?? '-',
+          fabricante: v.vehicleModel?.manufacturer ?? '-',
+          tipo: this.getVehicleTypeLabel(v.vehicleModel?.type),
+          placa: v.licensePlate,
+          capacidade: v.vehicleModel?.maxCapacity ?? '-',
+        }));
+        this.originalData = mapped;
+        this.filteredData = [...mapped];
+        this.loading = false;
+      },
+      error: () => {
+        this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Erro ao buscar veículos. Tente novamente'});
+        this.loading = false;
+      }
+    });
+  }
+
+  public createVehicle(data: any) {
+    const body = {
+      licensePlate: data.licensePlate,
+      vehicleModelId: Number(data.vehicleModelId),
+      chassisNumber: data.chassisNumber,
+      mileage: Number(data.mileage),
+      status: Number(data.status),
+      vehicleCondition: Number(data.vehicleCondition),
+      originCountry: data.originCountry,
+    };
+
+    this.vehicleService.postVehicle(body).subscribe({
+      next: () => {
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Veículo criado com sucesso!'});
+        this.getVehicles();
+      },
+      error: () => {
+        this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Erro ao criar veículo. Tente novamente'});
+      }
+    });
+  }
+
+  public editVehicle(vehicle: any) {
+    const body = {
+      licensePlate: vehicle.licensePlate,
+      mileage: Number(vehicle.mileage),
+      status: Number(vehicle.status),
+      vehicleCondition: Number(vehicle.vehicleCondition),
+      originCountry: vehicle.originCountry,
+    };
+
+    this.vehicleService.putVehicle(vehicle.id, body).subscribe({
+      next: () => {
+        this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Veículo editado com sucesso!'});
+        this.getVehicles();
+      },
+      error: () => {
+        this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Erro ao editar veículo. Tente novamente'});
+      }
+    });
   }
 
   public confirmDelete(vehicle: any) {
@@ -42,9 +108,19 @@ export class FleetManagementPage {
       rejectButtonProps: { label: 'Cancelar', severity: 'secondary', outlined: true },
       acceptButtonProps: { label: 'Deletar', severity: 'danger' },
       accept: () => {
-        this.filteredData = this.filteredData.filter(v => v.id !== vehicle.id);
-        this.originalData = this.originalData.filter(v => v.id !== vehicle.id);
+        this.deleteVehicle(vehicle);
+      }
+    });
+  }
+
+  public deleteVehicle(vehicle: any) {
+    this.vehicleService.deleteVehicle(vehicle.id).subscribe({
+      next: () => {
         this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Veículo excluído com sucesso!'});
+        this.getVehicles();
+      },
+      error: () => {
+        this.messageService.add({severity: 'error', summary: 'Erro', detail: 'Erro ao excluir veículo. Tente novamente'});
       }
     });
   }
@@ -87,12 +163,13 @@ export class FleetManagementPage {
     title: this.modalTitle,
     width: '800px',
     fields: [
-      { key: 'modelo', label: 'Modelo', type: ModalFieldType.Text, width: '40%' },
-      { key: 'fabricante', label: 'Fabricante', type: ModalFieldType.Text, width: '40%' },
-      { key: 'tipo', label: 'Tipo', type: ModalFieldType.Select, width: '30%', options: [{ label: 'Van', value: 'Van' }, { label: 'Pickup', value: 'Pickup' }, { label: 'Caminhão', value: 'Caminhão' }] },
-      { key: 'placa', label: 'Placa', type: ModalFieldType.Text, width: '25%' },
-      { key: 'capacidade', label: 'Capacidade', type: ModalFieldType.Text, width: '25%' },
+      { key: 'licensePlate', label: 'Placa', type: ModalFieldType.Text, width: '30%' },
+      { key: 'chassisNumber', label: 'Chassi', type: ModalFieldType.Text, width: '40%' },
+      { key: 'mileage', label: 'Quilometragem', type: ModalFieldType.Text, width: '30%' },
+      { key: 'vehicleModelId', label: 'ID Modelo', type: ModalFieldType.Text, width: '20%' },
+      { key: 'originCountry', label: 'País de Origem', type: ModalFieldType.Text, width: '30%' },
       { key: 'status', label: 'Status', type: ModalFieldType.Select, width: '30%', options: [{ label: 'Disponível', value: VehicleStatus.Avaliable }, { label: 'Em Uso', value: VehicleStatus.InUse }] },
+      { key: 'vehicleCondition', label: 'Condição', type: ModalFieldType.Select, width: '30%', options: [{ label: 'Novo', value: 1 }, { label: 'Usado', value: 2 }] },
     ]
   }
 
@@ -106,17 +183,10 @@ export class FleetManagementPage {
 
   public onConfirm(data: any) {
     if (this.isEditMode && this.selectedVehicle) {
-      const index = this.originalData.findIndex(v => v.id === this.selectedVehicle.id);
-      if (index !== -1) {
-        this.originalData[index] = { ...this.selectedVehicle, ...data };
-        this.filteredData = [...this.originalData];
-      }
-      this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Veículo editado com sucesso!'});
+      const updatedVehicle = { ...this.selectedVehicle, ...data };
+      this.editVehicle(updatedVehicle);
     } else {
-      const newVehicle = { id: Date.now(), ...data };
-      this.originalData.push(newVehicle);
-      this.filteredData = [...this.originalData];
-      this.messageService.add({severity: 'success', summary: 'Sucesso', detail: 'Veículo criado com sucesso!'});
+      this.createVehicle(data);
     }
   }
 
@@ -140,5 +210,16 @@ export class FleetManagementPage {
     this.filteredData = this.originalData.filter(item =>
       Object.values(item).some(value => String(value).toLowerCase().includes(lower))
     );
+  }
+
+  // Helpers
+  private getVehicleTypeLabel(type: number | undefined): string {
+    const types: { [key: number]: string } = {
+      0: 'Caminhão',
+      1: 'Van',
+      2: 'Carro',
+      3: 'Pickup',
+    };
+    return type !== undefined ? types[type] ?? '-' : '-';
   }
 }
