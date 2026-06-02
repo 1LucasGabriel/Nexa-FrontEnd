@@ -23,6 +23,11 @@ export const routes: Routes = [
         title: 'Nexa - Gestão de Frotas',
         loadComponent: () => import('./pages/fleet-management-page/fleet-management-page').then(m => m.FleetManagementPage)
     },
+    {
+        path: 'movement-control',
+        title: 'Nexa - Controle de Movimentações',
+        loadComponent: () => import('./pages/movement-control-page/movement-control-page').then(m => m.MovementControlPage)
+    },
     { 
         path: '**', 
         redirectTo: 'login', 

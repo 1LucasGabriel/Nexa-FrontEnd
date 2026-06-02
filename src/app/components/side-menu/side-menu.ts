@@ -1,4 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuItem, MessageService, PrimeIcons } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { AvatarModule } from 'primeng/avatar';
@@ -13,6 +14,7 @@ import { BadgeModule } from 'primeng/badge';
   styleUrl: './side-menu.scss',
 })
 export class SideMenu implements OnInit {
+  private router = inject(Router);
   @Input() userName: string = '';
   @Input() userRole: string = '';
 
@@ -25,9 +27,9 @@ export class SideMenu implements OnInit {
         label: '',
         items: [
           { label: 'Dashboard', icon: PrimeIcons.OBJECTS_COLUMN, iconStyle: { color: 'white' }, command: () => this.irPara('') },
-          { label: 'Funcionários', icon: PrimeIcons.USERS, iconStyle: { color: 'white' }, command: () => this.irPara('') },
+          { label: 'Funcionários', icon: PrimeIcons.USERS, iconStyle: { color: 'white' }, command: () => this.irPara('/employee-management') },
           { label: 'Alojamento', icon: PrimeIcons.HOME, iconStyle: { color: 'white' }, command: () => this.irPara('') },
-          { label: 'Veículos', icon: PrimeIcons.CAR, iconStyle: { color: 'white' }, command: () => this.irPara('') },
+          { label: 'Veículos', icon: PrimeIcons.CAR, iconStyle: { color: 'white' }, command: () => this.irPara('/fleet-management') },
           { label: 'Relatórios', icon: PrimeIcons.CLIPBOARD, iconStyle: { color: 'white' }, command: () => this.irPara('') },
           { label: 'Movimentações', icon: PrimeIcons.REPLY, iconStyle: { color: 'white' }, command: () => this.irPara('') },
           { label: 'Ajustes', icon: PrimeIcons.COG, iconStyle: { color: 'white' }, command: () => this.irPara('') },
@@ -37,7 +39,9 @@ export class SideMenu implements OnInit {
   }
 
   public irPara(rota: string) {
-    console.log('FUTURAMENTE IRÁ NAVEGAR PARA:', rota);
+    if (rota) {
+      this.router.navigate([rota]);
+    }
   }
 
   public sair() {
