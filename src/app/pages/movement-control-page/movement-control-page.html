@@ -1,0 +1,88 @@
+<main>
+    <app-side-menu></app-side-menu>
+
+    <section>
+        <h1>Controle de Movimentações</h1>
+
+        <div class="search-filter-row">
+            <div class="search-area">
+                <app-dynamic-search-bar 
+                    width="100%"
+                    placeholder="Pesquisar por ação, usuário ou detalhes..."
+                    placeholderColor="rgba(255, 255, 255, 0.6)" 
+                    textColor="#ffffff" 
+                    (onSearch)="onSearch($event)">
+                </app-dynamic-search-bar>
+            </div>
+
+            <div class="filter-area">
+                <button class="filter-btn">
+                    <i class="pi pi-filter"></i>
+                </button>
+                <select class="filter-select" (change)="onFilterChange($event)">
+                    <option value=""></option>
+                    <option value="0">Transferência</option>
+                    <option value="1">Entrada</option>
+                    <option value="2">Saída</option>
+                    <option value="3">Alteração Status</option>
+                    <option value="4">Veículos</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="counters-container">
+            @for (counter of counters; track counter.title) {
+                <div class="counter-card">
+                    <div class="icon-wrapper" [style.background-color]="counter.bgColor" [style.border-color]="counter.color">
+                        <i [class]="counter.icon" [style.color]="counter.color"></i>
+                    </div>
+                    <div class="counter-info">
+                        <span class="counter-title">{{ counter.title }}</span>
+                        <span class="counter-value">{{ counter.value }}</span>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="timeline-container">
+            @if (loading) {
+                <div class="loading-state">
+                    <i class="pi pi-spin pi-spinner"></i>
+                    <p>Carregando movimentações...</p>
+                </div>
+            } @else if (filteredMovements.length === 0) {
+                <div class="empty-state">
+                    <i class="pi pi-info-circle"></i>
+                    <p>Nenhuma movimentação encontrada.</p>
+                </div>
+            } @else {
+                <div class="movements-list">
+                    @for (movement of filteredMovements; track movement.id) {
+                        <div class="movement-item-card">
+                            <div class="left-content">
+                                <div class="type-icon" [style.background-color]="statusMap[movement.type].bgColor">
+                                    <i [class]="statusMap[movement.type].icon" [style.color]="statusMap[movement.type].color"></i>
+                                </div>
+                                <div class="movement-details">
+                                    <h3>{{ movement.title }}</h3>
+                                    <p [innerHTML]="movement.description"></p>
+                                </div>
+                            </div>
+                            
+                            <div class="right-content">
+                                <span class="status-badge" 
+                                      [style.background-color]="statusMap[movement.type].badgeBg"
+                                      [style.color]="statusMap[movement.type].color">
+                                    {{ statusMap[movement.type].label }}
+                                </span>
+                                <span class="movement-date">{{ movement.date | date: 'dd/MM/yyyy HH:mm' }}</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </section>
+</main>
+
+<p-toast></p-toast>

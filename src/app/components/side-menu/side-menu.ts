@@ -19,7 +19,7 @@ import { ToastModule } from 'primeng/toast';
 export class SideMenu implements OnInit {
   private router = inject(Router)
   private authService = inject(AuthenticateService)
-  private confirmationService =  inject(ConfirmationService)
+  private confirmationService = inject(ConfirmationService)
   private messageService = inject(MessageService)
 
   @Input() userName: string = '';
@@ -74,7 +74,7 @@ export class SideMenu implements OnInit {
         severity: 'info'
       },
       rejectVisible: false,
-      accept: () => {}
+      accept: () => { }
     });
   }
 

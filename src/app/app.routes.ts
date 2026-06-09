@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [   
+export const routes: Routes = [
     {
         path: '',
         redirectTo: 'login',
@@ -36,9 +36,14 @@ export const routes: Routes = [
         title: 'Nexa - Alocação de Veículos',
         loadComponent: () => import('./pages/employee-vehicle-allocation-page/employee-vehicle-allocation-page').then(m => m.EmployeeVehicleAllocationPage)
     },
-    { 
-        path: '**', 
-        redirectTo: 'login', 
-        pathMatch: 'full' 
+    {
+        path: 'movement-control',
+        title: 'Nexa - Controle de Movimentações',
+        loadComponent: () => import('./pages/movement-control-page/movement-control-page').then(m => m.MovementControlPage)
+    },
+    {
+        path: '**',
+        redirectTo: 'login',
+        pathMatch: 'full'
     }
 ];
