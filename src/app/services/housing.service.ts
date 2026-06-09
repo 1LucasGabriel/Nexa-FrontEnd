@@ -9,7 +9,7 @@ import { VehicleTrip } from '../models/vehicle-trip';
 })
 export class HousingService {
   private http = inject(HttpClient);
-  private urlAPI = 'https://localhost:8081/api';
+  private urlAPI = 'https://nexa-api-cilf.onrender.com/api';
 
   public getHousings() {
     return this.http.get<Housing[]>(`${this.urlAPI}/housings`, {

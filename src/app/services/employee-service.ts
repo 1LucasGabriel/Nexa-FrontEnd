@@ -8,7 +8,7 @@ import { CreateUpdateEmployeeDTO } from '../dtos/create-update-employee-dto';
 })
 export class EmployeeService {
   private http = inject(HttpClient)
-  private urlAPI = 'https://localhost:8081/api/employees'
+  private urlAPI = 'https://nexa-api-cilf.onrender.com/api/employees'
 
   public getEmployees() {
     const url = `${this.urlAPI}`

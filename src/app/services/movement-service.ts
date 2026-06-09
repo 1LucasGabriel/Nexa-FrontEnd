@@ -7,7 +7,7 @@ import { MovementLog } from '../pages/movement-control-page/movement-control-pag
 })
 export class MovementService {
   private http = inject(HttpClient)
-  private urlAPI = 'http://localhost:5102/api/movements'
+  private urlAPI = 'https://nexa-api-cilf.onrender.com/api/movements'
 
   public getMovements() {
     return this.http.get<MovementLog[]>(this.urlAPI, {

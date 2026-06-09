@@ -7,7 +7,7 @@ import { GetUserDTO } from '../dtos/get-user-dto';
 })
 export class UserService {
   private http = inject(HttpClient)
-  private urlAPI = 'https://localhost:8081/api/users'
+  private urlAPI = 'https://nexa-api-cilf.onrender.com/api/users'
 
   public getUser() {
     const url = `${this.urlAPI}`
@@ -18,5 +18,5 @@ export class UserService {
     })
   }
 
-  
+
 }

@@ -7,11 +7,11 @@ import { GetHomePageDTO } from '../dtos/get-home-page-dto';
 })
 export class HomePageService {
   private http = inject(HttpClient)
-  private urlAPI = 'https://localhost:5102/api/home'
+  private urlAPI = 'https://nexa-api-cilf.onrender.com/api/home'
 
   public get() {
     const url = `${this.urlAPI}`
-    return this.http.get<GetHomePageDTO >(url, {
+    return this.http.get<GetHomePageDTO>(url, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       }

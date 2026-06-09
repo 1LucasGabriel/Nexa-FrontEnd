@@ -41,7 +41,7 @@ export class SideMenu implements OnInit {
 
           { label: 'Dashboard', icon: PrimeIcons.OBJECTS_COLUMN, iconStyle: { color: 'white' }, command: () => this.warning() },
           { label: 'Relatórios', icon: PrimeIcons.CLIPBOARD, iconStyle: { color: 'white' }, command: () => this.warning() },
-          { label: 'Movimentações', icon: PrimeIcons.REPLY, iconStyle: { color: 'white' }, command: () => this.warning() },
+          { label: 'Movimentações', icon: PrimeIcons.REPLY, iconStyle: { color: 'white' }, command: () => this.irPara('movement-control') },
           { label: 'Configurações', icon: PrimeIcons.COG, iconStyle: { color: 'white' }, command: () => this.warning() },
         ]
       }

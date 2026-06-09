@@ -9,8 +9,8 @@ import { VehicleModel, CreateVehicleModelDTO } from '../models/vehicle-model';
 })
 export class VehicleService {
   private http = inject(HttpClient)
-  private urlAPI = 'http://localhost:5102/api/vehicles'
-  private urlModelsAPI = 'http://localhost:5102/api/vehicle-models'
+  private urlAPI = 'https://nexa-api-cilf.onrender.com/api/vehicles'
+  private urlModelsAPI = 'https://nexa-api-cilf.onrender.com/api/vehicle-models'
 
   public getVehicles() {
     return this.http.get<Vehicle[]>(this.urlAPI, {
