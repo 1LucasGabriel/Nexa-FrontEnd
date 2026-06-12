@@ -119,7 +119,7 @@ export class EmployeeManagementPage {
     { fieldAPI: 'cpf', header: 'CPF' },
     { fieldAPI: 'role', header: 'Cargo' },
     { fieldAPI: 'phoneNumber', header: 'Telefone' },
-    { fieldAPI: 'hireDate', header: 'Data de Admissão' },
+    { fieldAPI: 'hireDate', header: 'Data de Admissão', type: 'date' },
   ];
 
   actions: TableAction[] = [

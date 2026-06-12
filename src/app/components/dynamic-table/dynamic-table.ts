@@ -6,7 +6,7 @@ import { RippleModule } from 'primeng/ripple';
 import { PopoverModule } from 'primeng/popover';
 import { TooltipModule } from 'primeng/tooltip';
 
-export type ColumnType = 'text' | 'status' | 'badge';
+export type ColumnType = 'text' | 'status' | 'badge' | 'date';
 
 export interface TableColumn {
   fieldAPI: string;
@@ -38,6 +38,7 @@ export class DynamicTable {
   @Input() loading: boolean = false;
   @Input() totalRecords: number = 0;
   @Input() rows: number = 10;
+  @Input() tableStyle: any = { 'min-width': '60rem' };
 
   @Output() onAction = new EventEmitter<{ action: string; item: any }>();
   @Output() onLazyLoad = new EventEmitter<TableLazyLoadEvent>();

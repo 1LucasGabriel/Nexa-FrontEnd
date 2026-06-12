@@ -14,8 +14,8 @@ export class MapCard implements AfterViewInit, OnChanges {
 
   @Input() width: string = '100%';
   @Input() height: string = '400px';
-  @Input() origin!: [number, number];
-  @Input() destination!: [number, number];
+  @Input() origin?: [number, number];
+  @Input() destination?: [number, number];
   @Input() originLabel: string = '';
   @Input() destinationLabel: string = '';
   @Input() locked: boolean = false;
@@ -37,8 +37,12 @@ export class MapCard implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.map && this.origin && this.destination) {
-      this.drawRoute();
+    if (this.map) {
+      if (this.origin && this.destination) {
+        this.drawRoute();
+      } else {
+        this.clearRoute();
+      }
     }
   }
 
@@ -96,6 +100,9 @@ export class MapCard implements AfterViewInit, OnChanges {
 
   private drawRoute() {
     this.clearRoute();
+    if (!this.origin || !this.destination) {
+      return;
+    }
     this.loading = true;
 
     const [oLat, oLng] = this.origin;
@@ -115,11 +122,11 @@ export class MapCard implements AfterViewInit, OnChanges {
           opacity: 0.9,
         }).addTo(this.map);
 
-        const originMarker = L.marker(this.origin, { icon: this.createIcon('#22c55e') })
+        const originMarker = L.marker(this.origin!, { icon: this.createIcon('#22c55e') })
           .bindTooltip(this.originLabel, { permanent: false, direction: 'top' })
           .addTo(this.map);
 
-        const destMarker = L.marker(this.destination, { icon: this.createIcon('#ef4444') })
+        const destMarker = L.marker(this.destination!, { icon: this.createIcon('#ef4444') })
           .bindTooltip(this.destinationLabel, { permanent: false, direction: 'top' })
           .addTo(this.map);
 

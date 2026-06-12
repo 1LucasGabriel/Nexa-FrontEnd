@@ -1,0 +1,198 @@
+<main>
+  <!-- Menu Lateral -->
+  <app-side-menu></app-side-menu>
+
+  <!-- Seção Principal -->
+  <section class="allocation-container">
+    
+    <!-- COLUNA DA ESQUERDA: LISTA DE ALOJAMENTOS -->
+    <div class="housings-sidebar">
+      <div class="sidebar-header">
+        <h2>Alojamentos</h2>
+        <p>Selecione um alojamento para gerenciar</p>
+      </div>
+
+      <div class="sidebar-search-placeholder" *ngIf="loadingHousings">
+        <div class="spinner-container">
+          <i class="pi pi-spin pi-spinner spinner-icon"></i>
+          <span>Carregando alojamentos...</span>
+        </div>
+      </div>
+
+      <div class="housings-list" *ngIf="!loadingHousings">
+        <div 
+          *ngFor="let h of housings" 
+          class="housing-card" 
+          [class.active]="selectedHousing?.id === h.id"
+          (click)="selectHousing(h)"
+        >
+          <div class="card-top">
+            <span class="housing-name">{{ h.name }}</span>
+            <span 
+              class="type-chip" 
+              [style.background]="getHousingTypeColor(h.housingType)"
+            >
+              {{ getHousingTypeLabel(h.housingType) }}
+            </span>
+          </div>
+
+          <div class="card-capacity">
+            <div class="capacity-info">
+              <span>Ocupação</span>
+              <strong>{{ h.currentCapacity || 0 }} / {{ h.maxCapacity }}</strong>
+            </div>
+            <div class="progress-bar-container">
+              <div 
+                class="progress-bar-fill" 
+                [style.width.%]="getOccupancyPercent(h)"
+                [style.background-color]="getProgressBarColor(getOccupancyPercent(h))"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="housings.length === 0" class="empty-sidebar">
+          <i class="pi pi-home empty-icon"></i>
+          <p>Nenhum alojamento cadastrado.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUNA DA DIREITA: DETALHES E OCUPANTES -->
+    <div class="allocation-details">
+      <div *ngIf="selectedHousing" class="details-wrapper">
+        
+        <!-- Cabeçalho do Alojamento Selecionado -->
+        <div class="details-header-card">
+          <div class="header-left">
+            <div class="header-title-block">
+              <h1>{{ selectedHousing.name }}</h1>
+              <p class="type-tag" [style.color]="getHousingTypeColor(selectedHousing.housingType)">
+                <i class="pi pi-building"></i> Alojamento {{ getHousingTypeLabel(selectedHousing.housingType) }}
+              </p>
+            </div>
+            <div class="capacity-summary">
+              <div class="gauge-label">
+                <span>Capacidade Geral:</span>
+                <strong>{{ getOccupancyPercent(selectedHousing) }}% Preenchido</strong>
+              </div>
+              <div class="gauge-bar">
+                <div 
+                  class="gauge-fill" 
+                  [style.width.%]="getOccupancyPercent(selectedHousing)"
+                  [style.background-color]="getProgressBarColor(getOccupancyPercent(selectedHousing))"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="header-right">
+            <button class="action-btn-primary" (click)="openCheckInModal()">
+              <i class="pi pi-user-plus"></i>
+              <span>Hospedar Funcionário</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Lista de Ocupantes Atuais -->
+        <div class="occupants-section">
+          <div class="section-title">
+            <h3>Funcionários Hospedados</h3>
+            <span class="count-badge">{{ currentAllocations.length }} atual(is)</span>
+          </div>
+
+          <!-- Spinner de Carregamento das Alocações -->
+          <div class="loading-placeholder" *ngIf="loadingAllocations">
+            <i class="pi pi-spin pi-spinner spinner-icon"></i>
+            <p>Carregando ocupantes do alojamento...</p>
+          </div>
+
+          <!-- Lista de Ocupantes -->
+          <div class="occupants-list" *ngIf="!loadingAllocations && currentAllocations.length > 0">
+            <div *ngFor="let alloc of currentAllocations" class="occupant-row">
+              <div class="occupant-profile">
+                <p-avatar 
+                  [label]="getInitials(alloc.employee?.name)" 
+                  shape="circle" 
+                  size="large" 
+                  styleClass="occupant-avatar"
+                ></p-avatar>
+                <div class="profile-info">
+                  <span class="profile-name">{{ alloc.employee?.name }}</span>
+                  <span class="profile-role">{{ alloc.employee?.role || 'Não Definido' }}</span>
+                </div>
+              </div>
+
+              <div class="occupant-meta">
+                <div class="meta-item">
+                  <span class="meta-label">CPF</span>
+                  <span class="meta-val">{{ alloc.employee?.cpf }}</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Hospedado em</span>
+                  <span class="meta-val">{{ alloc.checkInDate | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+              </div>
+
+              <div class="occupant-actions">
+                <button 
+                  class="btn-action btn-transfer" 
+                  title="Transferir de Alojamento"
+                  (click)="openTransferModal(alloc)"
+                >
+                  <i class="pi pi-arrow-right-arrow-left"></i>
+                  <span>Transferir</span>
+                </button>
+                <button 
+                  class="btn-action btn-checkout" 
+                  title="Registrar Saída"
+                  (click)="checkOutEmployee(alloc)"
+                >
+                  <i class="pi pi-sign-out"></i>
+                  <span>Saída</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State Ocupantes -->
+          <div class="empty-occupants" *ngIf="!loadingAllocations && currentAllocations.length === 0">
+            <i class="pi pi-users empty-icon"></i>
+            <h4>Nenhum hóspede no momento</h4>
+            <p>Este alojamento está vazio. Use o botão acima para hospedar um colaborador.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- State: Nenhum alojamento selecionado -->
+      <div *ngIf="!selectedHousing" class="no-selection-state">
+        <i class="pi pi-building selection-icon"></i>
+        <h2>Gerenciamento de Alocações</h2>
+        <p>Selecione um alojamento na barra lateral esquerda para visualizar os hóspedes e gerenciar transferências ou check-outs.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- Modais Dinâmicos -->
+  <app-dynamic-modal 
+    [title]="'Hospedar Funcionário'" 
+    [config]="checkInModalConfig" 
+    [visible]="isCheckInModalOpen" 
+    (visibleChange)="isCheckInModalOpen = $event" 
+    (confirm)="onConfirmCheckIn($event)"
+  ></app-dynamic-modal>
+
+  <app-dynamic-modal 
+    [title]="'Transferir Funcionário'" 
+    [config]="transferModalConfig" 
+    [visible]="isTransferModalOpen" 
+    (visibleChange)="isTransferModalOpen = $event" 
+    (confirm)="onConfirmTransfer($event)"
+  ></app-dynamic-modal>
+
+  <!-- Suporte e Dialogs do PrimeNG -->
+  <p-confirmdialog />
+  <p-toast />
+</main>

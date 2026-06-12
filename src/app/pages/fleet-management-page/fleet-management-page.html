@@ -9,14 +9,81 @@
             </div>
 
             <div class="button-search">
-                <app-dynamic-button [text]="buttonText" [isRounded]="true" (buttonClick)="openAddModal()"></app-dynamic-button>
-                <app-dynamic-search-bar placeholderColor="#ffffff" textColor="#ffffff" (onSearch)="onSearch($event)"></app-dynamic-search-bar>
+                <app-dynamic-button text="Gerenciar Modelos" [isRounded]="true"
+                    (buttonClick)="openModelModal()"></app-dynamic-button>
+                <app-dynamic-button [text]="buttonText" [isRounded]="true"
+                    (buttonClick)="openAddModal()"></app-dynamic-button>
+                <app-dynamic-search-bar placeholderColor="#ffffff" textColor="#ffffff"
+                    (onSearch)="onSearch($event)"></app-dynamic-search-bar>
             </div>
         </div>
 
-        <app-dynamic-table [columns]="columns" [data]="filteredData" [rows]="rows" [totalRecords]="filteredData.length" [actions]="actions" (onAction)="handleAction($event)" [statusColorMap]="statusColorMap"></app-dynamic-table>
+        <app-dynamic-table [columns]="columns" [data]="filteredData" [rows]="rows" [totalRecords]="filteredData.length"
+            [actions]="actions" (onAction)="handleAction($event)" [statusColorMap]="statusColorMap"></app-dynamic-table>
     </section>
 
     <p-confirmdialog />
-    <app-dynamic-modal [title]="modalTitle" [initialData]="selectedVehicle" [config]="config" [visible]="isModalOpen" (visibleChange)="onModalVisibilityChange($event)" (confirm)="onConfirm($event)"></app-dynamic-modal>
+    <app-dynamic-modal [title]="modalTitle" [initialData]="selectedVehicle" [config]="config" [visible]="isModalOpen"
+        (visibleChange)="onModalVisibilityChange($event)" (confirm)="onConfirm($event)"></app-dynamic-modal>
+
+    <p-toast />
+
+    <!-- Modal de Gerenciamento de Modelos de Veículo -->
+    <p-dialog header="Gerenciar Modelos de Veículo" [(visible)]="isModelModalOpen" [modal]="true" [draggable]="false"
+        [resizable]="false" [style]="{ width: '1200px' }" styleClass="dark-modal" appendTo="body">
+        <div class="dialog-layout" style="display: flex; gap: 20px; padding: 10px; color: #fff;">
+            <!-- Formulário para Criar Modelo -->
+            <div class="model-form"
+                style="flex: 1; display: flex; flex-direction: column; gap: 12px; background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                <h3 style="margin-top: 0; margin-bottom: 5px; font-weight: 600;">Novo Modelo</h3>
+                <div>
+                    <label style="display: block; margin-bottom: 4px; font-size: 0.85rem;">Fabricante *</label>
+                    <input pInputText [(ngModel)]="newModel.manufacturer" placeholder="Ex: Volvo, Scania, Ford"
+                        style="width: 100%;" class="w-full" />
+                </div>
+                <div>
+                    <label style="display: block; margin-bottom: 4px; font-size: 0.85rem;">Modelo *</label>
+                    <input pInputText [(ngModel)]="newModel.model" placeholder="Ex: FH 540, Transit, Ka"
+                        style="width: 100%;" class="w-full" />
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 4px; font-size: 0.85rem;">Tipo *</label>
+                        <p-select [(ngModel)]="newModel.type" [options]="vehicleTypes" optionLabel="label"
+                            optionValue="value" styleClass="w-full" style="width: 100%;"></p-select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 4px; font-size: 0.85rem;">Ano *</label>
+                        <p-inputnumber [(ngModel)]="newModel.year" [useGrouping]="false" styleClass="w-full"
+                            style="width: 100%;"></p-inputnumber>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 4px; font-size: 0.85rem;">Combustível *</label>
+                        <p-select [(ngModel)]="newModel.fuelType" [options]="fuelTypes" optionLabel="label"
+                            optionValue="value" styleClass="w-full" style="width: 100%;"></p-select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display: block; margin-bottom: 4px; font-size: 0.85rem;">Capacidade *</label>
+                        <p-inputnumber [(ngModel)]="newModel.maxCapacity" styleClass="w-full"
+                            style="width: 100%;"></p-inputnumber>
+                    </div>
+                </div>
+                <button pButton label="Salvar Modelo" class="p-button-primary" style="margin-top: 10px; width: 100%;"
+                    (click)="createVehicleModel()"></button>
+            </div>
+
+            <!-- Tabela de Modelos -->
+            <div class="model-table-container"
+                style="flex: 1.5; max-height: 480px; overflow-y: auto; background: rgba(255, 255, 255, 0.02); padding: 15px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.05);">
+                <h3 style="margin-top: 0; margin-bottom: 15px; font-weight: 600;">Modelos Disponíveis</h3>
+                <app-dynamic-table [columns]="modelColumns" [data]="vehicleModels" [rows]="10"
+                    [totalRecords]="vehicleModels.length" [actions]="modelActions"
+                    (onAction)="handleModelAction($event)" [loading]="loadingModels"
+                    [tableStyle]="{ 'min-width': '100%' }">
+                </app-dynamic-table>
+            </div>
+        </div>
+    </p-dialog>
 </main>

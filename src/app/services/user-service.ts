@@ -18,5 +18,30 @@ export class UserService {
     })
   }
 
+  public getMe() {
+    const url = `${this.urlAPI}/me`
+    return this.http.get<any>(url, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+  }
 
+  public updateMe(data: any) {
+    const url = `${this.urlAPI}/me`
+    return this.http.put<any>(url, data, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+  }
+
+  public changePassword(data: any) {
+    const url = `${this.urlAPI}/change-password`
+    return this.http.put<any>(url, data, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+  }
 }

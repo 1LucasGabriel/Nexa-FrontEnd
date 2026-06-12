@@ -35,14 +35,15 @@ export class SideMenu implements OnInit {
         items: [
           { label: 'Home', icon: PrimeIcons.HOME, iconStyle: { color: 'white' }, command: () => this.irPara('home') },
           { label: 'Alojamentos', icon: PrimeIcons.WAREHOUSE, iconStyle: { color: 'white' }, command: () => this.irPara('alojamentos') },
-          { label: 'Alocação', icon: PrimeIcons.MAP, iconStyle: { color: 'white' }, command: () => this.irPara('employee-vehicle-allocation') },
+          { label: 'Alocação Veículos', icon: PrimeIcons.MAP, iconStyle: { color: 'white' }, command: () => this.irPara('employee-vehicle-allocation') },
+          { label: 'Alocação Alojamentos', icon: PrimeIcons.BUILDING, iconStyle: { color: 'white' }, command: () => this.irPara('employee-housing-allocation') },
           { label: 'Funcionários', icon: PrimeIcons.USERS, iconStyle: { color: 'white' }, command: () => this.irPara('employee-management') },
           { label: 'Veículos', icon: PrimeIcons.CAR, iconStyle: { color: 'white' }, command: () => this.irPara('fleet-management') },
 
-          { label: 'Dashboard', icon: PrimeIcons.OBJECTS_COLUMN, iconStyle: { color: 'white' }, command: () => this.warning() },
-          { label: 'Relatórios', icon: PrimeIcons.CLIPBOARD, iconStyle: { color: 'white' }, command: () => this.warning() },
+          { label: 'Dashboard', icon: PrimeIcons.OBJECTS_COLUMN, iconStyle: { color: 'white' }, command: () => this.irPara('operational-dashboard') },
+          // { label: 'Relatórios', icon: PrimeIcons.CLIPBOARD, iconStyle: { color: 'white' }, command: () => this.warning() },
           { label: 'Movimentações', icon: PrimeIcons.REPLY, iconStyle: { color: 'white' }, command: () => this.irPara('movement-control') },
-          { label: 'Configurações', icon: PrimeIcons.COG, iconStyle: { color: 'white' }, command: () => this.warning() },
+          { label: 'Configurações', icon: PrimeIcons.COG, iconStyle: { color: 'white' }, command: () => this.irPara('configurations') },
         ]
       }
     ];

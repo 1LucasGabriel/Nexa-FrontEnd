@@ -20,12 +20,12 @@
                     <i class="pi pi-filter"></i>
                 </button>
                 <select class="filter-select" (change)="onFilterChange($event)">
-                    <option value=""></option>
-                    <option value="0">Transferência</option>
-                    <option value="1">Entrada</option>
-                    <option value="2">Saída</option>
-                    <option value="3">Alteração Status</option>
-                    <option value="4">Veículos</option>
+                    <option value="">Todos os tipos</option>
+                    <option value="1">Transferência</option>
+                    <option value="2">Entrada</option>
+                    <option value="3">Saída</option>
+                    <option value="4">Alteração Status</option>
+                    <option value="5">Veículos</option>
                 </select>
             </div>
         </div>
@@ -60,8 +60,8 @@
                     @for (movement of filteredMovements; track movement.id) {
                         <div class="movement-item-card">
                             <div class="left-content">
-                                <div class="type-icon" [style.background-color]="statusMap[movement.type].bgColor">
-                                    <i [class]="statusMap[movement.type].icon" [style.color]="statusMap[movement.type].color"></i>
+                                <div class="type-icon" [style.background-color]="statusMap[movement.type]?.bgColor">
+                                    <i [class]="statusMap[movement.type]?.icon" [style.color]="statusMap[movement.type]?.color"></i>
                                 </div>
                                 <div class="movement-details">
                                     <h3>{{ movement.title }}</h3>
@@ -71,17 +71,29 @@
                             
                             <div class="right-content">
                                 <span class="status-badge" 
-                                      [style.background-color]="statusMap[movement.type].badgeBg"
-                                      [style.color]="statusMap[movement.type].color">
-                                    {{ statusMap[movement.type].label }}
+                                      [style.background-color]="statusMap[movement.type]?.badgeBg"
+                                      [style.color]="statusMap[movement.type]?.color">
+                                    {{ movement.statusLabel || statusMap[movement.type]?.label }}
                                 </span>
-                                <span class="movement-date">{{ movement.date | date: 'dd/MM/yyyy HH:mm' }}</span>
+                                <span class="movement-date">{{ movement.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
                             </div>
                         </div>
                     }
                 </div>
             }
         </div>
+
+        @if (totalPages > 1) {
+            <div class="pagination-container">
+                <button [disabled]="page === 1" (click)="changePage(page - 1)" class="pagination-btn">
+                    <i class="pi pi-chevron-left"></i> Anterior
+                </button>
+                <span class="pagination-info">Página {{ page }} de {{ totalPages }}</span>
+                <button [disabled]="page >= totalPages" (click)="changePage(page + 1)" class="pagination-btn">
+                    Próximo <i class="pi pi-chevron-right"></i>
+                </button>
+            </div>
+        }
     </section>
 </main>
 

@@ -9,10 +9,32 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { VehicleStatus } from '../../enums/vehicle-status';
 import { ToastModule } from "primeng/toast";
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { SelectModule } from 'primeng/select';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-fleet-management-page',
-  imports: [SideMenu, DynamicButton, DynamicSearchBar, DynamicTable, DynamicModal, ToastModule, ConfirmDialogModule],
+  imports: [
+    SideMenu,
+    DynamicButton,
+    DynamicSearchBar,
+    DynamicTable,
+    DynamicModal,
+    ToastModule,
+    ConfirmDialogModule,
+    DialogModule,
+    TableModule,
+    ButtonModule,
+    InputTextModule,
+    SelectModule,
+    InputNumberModule,
+    FormsModule,
+  ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './fleet-management-page.html',
   styleUrl: './fleet-management-page.scss',
@@ -30,8 +52,36 @@ export class FleetManagementPage {
   originalData: any[] = [];
   filteredData: any[] = [];
 
+  // ─── Estado de Modelo de Veículo ──────────────────────────
+  isModelModalOpen = false;
+  vehicleModels: any[] = [];
+  loadingModels = false;
+  newModel = {
+    manufacturer: '',
+    model: '',
+    type: 3,
+    year: new Date().getFullYear(),
+    fuelType: 4,
+    maxCapacity: 5
+  };
+
+  vehicleTypes = [
+    { label: 'Caminhão', value: 1 },
+    { label: 'Van', value: 2 },
+    { label: 'Carro', value: 3 },
+    { label: 'Pickup', value: 4 }
+  ];
+
+  fuelTypes = [
+    { label: 'Diesel', value: 1 },
+    { label: 'Gasolina', value: 2 },
+    { label: 'Álcool/Etanol', value: 3 },
+    { label: 'Flex', value: 4 }
+  ];
+
   ngAfterViewInit() {
     this.getVehicles();
+    this.loadVehicleModels();
   }
 
   public getVehicles() {
@@ -140,6 +190,17 @@ export class FleetManagementPage {
     { label: 'Excluir', icon: 'pi pi-trash', action: 'delete', buttonClass: 'p-button-danger' },
   ];
 
+  modelColumns: TableColumn[] = [
+    { fieldAPI: 'id',           header: 'ID',         width: '80px'  },
+    { fieldAPI: 'manufacturer', header: 'Fabricante', width: '150px' },
+    { fieldAPI: 'model',        header: 'Modelo',     width: '150px' },
+    { fieldAPI: 'maxCapacity',  header: 'Capacidade', width: '120px' }
+  ];
+
+  modelActions: TableAction[] = [
+    { label: 'Excluir', icon: 'pi pi-trash', action: 'delete', buttonClass: 'p-button-text p-button-sm p-button-danger' }
+  ];
+
   statusColorMap = {
     1: { color: '#3b82f6', label: 'Em Uso' },
     2: { color: '#22c55e', label: 'Disponível' },
@@ -166,7 +227,7 @@ export class FleetManagementPage {
       { key: 'licensePlate', label: 'Placa', type: ModalFieldType.Text, width: '30%' },
       { key: 'chassisNumber', label: 'Chassi', type: ModalFieldType.Text, width: '40%' },
       { key: 'mileage', label: 'Quilometragem', type: ModalFieldType.Text, width: '30%' },
-      { key: 'vehicleModelId', label: 'ID Modelo', type: ModalFieldType.Text, width: '20%' },
+      { key: 'vehicleModelId', label: 'Modelo', type: ModalFieldType.Select, width: '30%', options: [] },
       { key: 'originCountry', label: 'País de Origem', type: ModalFieldType.Text, width: '30%' },
       { key: 'status', label: 'Status', type: ModalFieldType.Select, width: '30%', options: [{ label: 'Disponível', value: VehicleStatus.Avaliable }, { label: 'Em Uso', value: VehicleStatus.InUse }] },
       { key: 'vehicleCondition', label: 'Condição', type: ModalFieldType.Select, width: '30%', options: [{ label: 'Novo', value: 1 }, { label: 'Usado', value: 2 }] },
@@ -215,11 +276,93 @@ export class FleetManagementPage {
   // Helpers
   private getVehicleTypeLabel(type: number | undefined): string {
     const types: { [key: number]: string } = {
-      0: 'Caminhão',
-      1: 'Van',
-      2: 'Carro',
-      3: 'Pickup',
+      1: 'Caminhão',
+      2: 'Van',
+      3: 'Carro',
+      4: 'Pickup',
     };
     return type !== undefined ? types[type] ?? '-' : '-';
+  }
+
+  public handleModelAction(event: { action: string; item: any }) {
+    if (event.action === 'delete') {
+      this.deleteVehicleModel(event.item.id);
+    }
+  }
+
+  // ─── Gerenciamento de Modelos de Veículo ──────────────────
+  public openModelModal() {
+    this.isModelModalOpen = true;
+    this.loadVehicleModels();
+  }
+
+  public loadVehicleModels() {
+    this.loadingModels = true;
+    this.vehicleService.getVehicleModels().subscribe({
+      next: (data) => {
+        this.vehicleModels = data;
+
+        // Atualiza as opções do dropdown dinâmico no config do modal
+        const modelField = this.config.fields.find(f => f.key === 'vehicleModelId');
+        if (modelField) {
+          modelField.options = this.vehicleModels.map(m => ({
+            label: `${m.manufacturer || ''} ${m.model || ''} (${m.year || ''})`,
+            value: m.id
+          }));
+        }
+
+        this.loadingModels = false;
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar modelos de veículo.' });
+        this.loadingModels = false;
+      }
+    });
+  }
+
+  public createVehicleModel() {
+    if (!this.newModel.manufacturer || !this.newModel.model || !this.newModel.year || !this.newModel.maxCapacity) {
+      this.messageService.add({ severity: 'warn', summary: 'Aviso', detail: 'Por favor, preencha os campos obrigatórios (Fabricante, Modelo, Ano, Capacidade).' });
+      return;
+    }
+
+    const payload = {
+      manufacturer: this.newModel.manufacturer,
+      model: this.newModel.model,
+      type: Number(this.newModel.type),
+      year: Number(this.newModel.year),
+      fuelType: Number(this.newModel.fuelType),
+      maxCapacity: Number(this.newModel.maxCapacity)
+    };
+
+    this.vehicleService.postVehicleModel(payload).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Modelo de veículo cadastrado com sucesso!' });
+        this.newModel = {
+          manufacturer: '',
+          model: '',
+          type: 3,
+          year: new Date().getFullYear(),
+          fuelType: 4,
+          maxCapacity: 5
+        };
+        this.loadVehicleModels();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao cadastrar modelo de veículo.' });
+      }
+    });
+  }
+
+  public deleteVehicleModel(id: number) {
+    this.vehicleService.deleteVehicleModel(id).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Modelo excluído com sucesso!' });
+        this.loadVehicleModels();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir modelo de veículo.' });
+      }
+    });
   }
 }

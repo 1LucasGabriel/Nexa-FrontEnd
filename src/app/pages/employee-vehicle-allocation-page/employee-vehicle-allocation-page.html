@@ -6,20 +6,21 @@
             <h3 class="sidebar-title">VEÍCULOS</h3>
             
             <div class="vehicles-wrapper">
-                <div *ngFor="let vehicle of vehicles" class="vehicle-card" [class.active]="selectedVehicle.id === vehicle.id" (click)="selectVehicle(vehicle)">
+                <div *ngFor="let vehicle of vehicles" class="vehicle-card" [class.active]="selectedVehicle?.id === vehicle.id" (click)="selectVehicle(vehicle)">
                     <div class="data">
-                        <i class="pi pi-circle-fill status-dot" [class.available]="vehicle.status === 'available'"></i>
+                        <i class="pi pi-circle-fill status-dot" [class.available]="vehicle.status === 2" [class.in-use]="vehicle.status === 1"></i>
                         <span class="plate">{{vehicle.plate}}</span>
                         <p class="model">{{vehicle.model}}</p>
                     </div>
-                    <div class="capacity" [class.active-capacity]="selectedVehicle.id === vehicle.id">
+                    <div class="capacity" [class.active-capacity]="selectedVehicle?.id === vehicle.id">
                         <p>{{vehicle.occupied | number:'2.0-0'}} / {{vehicle.capacity | number:'2.0-0'}}</p>
                     </div>
                 </div>
             </div>
 
             <div class="sidebar-footer">
-                <button class="add-vehicle-btn">{{textButton}}</button>
+                <button class="add-vehicle-btn" (click)="irPara('fleet-management')">{{textButton}}</button>
+                <button class="add-driver-btn" (click)="openRegisterDriverModal()">+ Novo Motorista</button>
             </div>
         </aside>
 
@@ -30,18 +31,23 @@
                 <div class="route-inputs">
                     <div class="input-group">
                         <i class="pi pi-map-marker icon"></i>
-                        <input type="text" pInputText placeholder="Endereço Origem" class="route-input"/>
+                        <p-select [options]="addressOptions" optionLabel="label" optionValue="value" [(ngModel)]="selectedOriginAddressId" (onChange)="onAddressChange()" [disabled]="lastTrip !== null" placeholder="Endereço Origem" class="route-select" [filter]="true"></p-select>
                     </div>
                     <i class="pi pi-arrow-right arrow-icon"></i>
                     <div class="input-group">
-                        <input type="text" pInputText placeholder="Endereço Destino" class="route-input"/>
+                        <p-select [options]="addressOptions" optionLabel="label" optionValue="value" [(ngModel)]="selectedDestinationAddressId" (onChange)="onAddressChange()" [disabled]="lastTrip !== null" placeholder="Endereço Destino" class="route-select" [filter]="true"></p-select>
                     </div>
-                    <button class="edit-route-btn"><i class="pi pi-pencil"></i> Editar Rota</button>
+                    <button *ngIf="lastTrip !== null" class="edit-route-btn" (click)="warning()"><i class="pi pi-pencil"></i> Editar Rota</button>
                 </div>
             </div>
 
             <div class="map-section">
                 <app-map-card [origin]="origin" [locked]="true" [destination]="destination" height="100%" width="100%" originLabel="Origem" destinationLabel="Destino"></app-map-card>
+                <div *ngIf="!origin || !destination" class="no-route-overlay">
+                    <i class="pi pi-map map-placeholder-icon"></i>
+                    <p class="placeholder-text">Nenhuma rota ativa selecionada</p>
+                    <p class="placeholder-subtext">Selecione os endereços de origem e destino na barra superior para visualizar o trajeto no mapa.</p>
+                </div>
             </div>
 
             <div class="bottom-split">
@@ -52,7 +58,7 @@
                             <h3>Funcionários no Veículo</h3>
                         </div>
                         <div class="capacity-pill">
-                            <span class="active-text">{{selectedVehicle.occupied}}</span> / {{selectedVehicle.capacity}}
+                            <span class="active-text">{{selectedVehicle?.occupied || 0}}</span> / {{selectedVehicle?.capacity || 0}}
                         </div>
                     </div>
                     
@@ -70,13 +76,12 @@
                             </div>
                             <span class="emp-cpf">{{emp.cpf}}</span>
                             <div class="emp-actions">
-                                <button class="action-btn edit"><i class="pi pi-pencil"></i></button>
-                                <button class="action-btn delete"><i class="pi pi-trash"></i></button>
+                                <button class="action-btn delete" (click)="removeEmployee(emp.linkId)"><i class="pi pi-trash"></i></button>
                             </div>
                         </div>
                     </div>
                     
-                    <button class="add-emp-btn">+ Adicionar Funcionário</button>
+                    <button class="add-emp-btn" (click)="openEmployeeModal()">+ Adicionar Funcionário</button>
                 </div>
 
                 <div class="vehicle-details-column">
@@ -85,41 +90,53 @@
                             <div class="v-title">
                                 <i class="pi pi-car car-icon"></i>
                                 <div>
-                                    <h2>{{selectedVehicle.plate}}</h2>
-                                    <p>{{selectedVehicle.model}}</p>
+                                    <h2>{{selectedVehicle?.plate}}</h2>
+                                    <p>{{selectedVehicle?.model}}</p>
                                 </div>
                             </div>
-                            <div class="v-status">
-                                <i class="pi pi-circle-fill"></i> Disponível
+                            <div class="v-status" [class.in-use]="selectedVehicle?.status === 1">
+                                <i class="pi pi-circle-fill"></i> {{selectedVehicle?.status === 1 ? 'Em Uso' : 'Disponível'}}
                             </div>
                         </div>
 
                         <div class="card-details">
                             <div class="detail-row">
                                 <span class="label"><i class="pi pi-users icon"></i> Capacidade</span>
-                                <span class="value">{{selectedVehicle.capacity}} lugares</span>
+                                <span class="value">{{selectedVehicle?.capacity || 0}} lugares</span>
                             </div>
                             <div class="detail-row occ-row">
                                 <span class="label">Ocupação</span>
-                                <span class="value"><strong class="highlight-green">{{selectedVehicle.occupied}} / {{selectedVehicle.capacity}}</strong> ocupados</span>
+                                <span class="value"><strong class="highlight-green">{{selectedVehicle?.occupied || 0}} / {{selectedVehicle?.capacity || 0}}</strong> ocupados</span>
                             </div>
-                            <p-progressBar [value]="(selectedVehicle.occupied / selectedVehicle.capacity) * 100" [showValue]="false"></p-progressBar>
+                            <p-progressBar [value]="selectedVehicle?.capacity ? (selectedVehicle!.occupied / selectedVehicle!.capacity) * 100 : 0" [showValue]="false"></p-progressBar>
                         </div>
 
                         <div class="info-box">
                             <i class="pi pi-users info-icon"></i>
                             <div class="info-texts">
-                                <h4>{{selectedVehicle.capacity - selectedVehicle.occupied}} lugares disponíveis</h4>
-                                <p>Você pode adicionar mais {{selectedVehicle.capacity - selectedVehicle.occupied}} funcionários.</p>
+                                <h4>{{selectedVehicle ? selectedVehicle.capacity - selectedVehicle.occupied : 0}} lugares disponíveis</h4>
+                                <p>Você pode adicionar mais {{selectedVehicle ? selectedVehicle.capacity - selectedVehicle.occupied : 0}} funcionários.</p>
                             </div>
                         </div>
 
-                        <button class="start-journey-btn">
-                            <i class="pi pi-play play-icon"></i> Iniciar Viagem
+                        <button *ngIf="lastTrip !== null || selectedVehicle?.status === 1; else startJourney" class="start-journey-btn" [style.background]="lastTrip === null ? '#f97316' : '#ef4444'" (click)="endJourney()">
+                            <i class="pi pi-stop play-icon"></i> {{ lastTrip === null ? 'Forçar Liberação' : 'Finalizar Viagem' }}
                         </button>
+                        <ng-template #startJourney>
+                            <button class="start-journey-btn" (click)="openTripModal()">
+                                <i class="pi pi-play play-icon"></i> Iniciar Viagem
+                            </button>
+                        </ng-template>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </main>
+
+<p-toast></p-toast>
+<p-confirmdialog />
+
+<app-dynamic-modal [title]="tripModalConfig.title" [config]="tripModalConfig" [visible]="isTripModalOpen" (visibleChange)="isTripModalOpen = $event" (confirm)="onConfirmTrip($event)"></app-dynamic-modal>
+<app-dynamic-modal [title]="employeeModalConfig.title" [config]="employeeModalConfig" [visible]="isEmployeeModalOpen" (visibleChange)="isEmployeeModalOpen = $event" (confirm)="onConfirmEmployee($event)"></app-dynamic-modal>
+<app-dynamic-modal [title]="driverModalConfig.title" [config]="driverModalConfig" [visible]="isDriverModalOpen" (visibleChange)="isDriverModalOpen = $event" (confirm)="onConfirmRegisterDriver($event)"></app-dynamic-modal>

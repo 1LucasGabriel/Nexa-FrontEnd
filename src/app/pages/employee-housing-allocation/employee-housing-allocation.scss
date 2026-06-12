@@ -1,0 +1,543 @@
+main {
+  margin: 50px;
+  display: flex;
+  height: 90vh;
+
+  .allocation-container {
+    margin-left: 50px;
+    width: 100% !important;
+    min-width: unset !important;
+    max-width: unset !important;
+    height: 100%;
+    background: linear-gradient(rgba(105, 105, 105, 0.28), rgba(105, 105, 105, 0.28)) border-box;
+    border-radius: 28px;           
+    border: 1.5px solid rgba(255, 255, 255, 0.185);
+    backdrop-filter: blur(16px);
+    display: flex;
+    overflow: hidden;
+  }
+
+  /* --- COLUNA DA ESQUERDA: LISTA DE ALOJAMENTOS --- */
+  .housings-sidebar {
+    width: 32%;
+    border-right: 1.5px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.05);
+
+      h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #ffffff;
+        font-weight: 700;
+      }
+
+      p {
+        margin: 6px 0 0 0;
+        font-size: 0.85rem;
+        color: #94a3b8;
+      }
+    }
+
+    .sidebar-search-placeholder {
+      padding: 20px;
+    }
+
+    .spinner-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 0;
+      color: rgba(255, 255, 255, 0.6);
+      gap: 12px;
+
+      .spinner-icon {
+        font-size: 1.8rem;
+        color: #4f46e5;
+      }
+    }
+
+    .housings-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      /* Scrollbar personalizado */
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+      }
+      &::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+    }
+
+    .housing-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      &.active {
+        background: rgba(79, 70, 229, 0.15);
+        border-color: #4f46e5;
+        box-shadow: 0 0 15px rgba(79, 70, 229, 0.25);
+      }
+
+      .card-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+
+        .housing-name {
+          font-weight: 600;
+          font-size: 1.05rem;
+          color: #ffffff;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 60%;
+        }
+
+        .type-chip {
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: #ffffff;
+          padding: 3px 9px;
+          border-radius: 20px;
+          text-transform: uppercase;
+        }
+      }
+
+      .card-capacity {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        .capacity-info {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.8rem;
+          color: #94a3b8;
+
+          strong {
+            color: #ffffff;
+          }
+        }
+
+        .progress-bar-container {
+          width: 100%;
+          height: 6px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+          overflow: hidden;
+
+          .progress-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.4s ease;
+          }
+        }
+      }
+    }
+
+    .empty-sidebar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      color: rgba(255, 255, 255, 0.4);
+      gap: 12px;
+
+      .empty-icon {
+        font-size: 2.2rem;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+      }
+    }
+  }
+
+  /* --- COLUNA DA DIREITA: DETALHES E OCUPANTES --- */
+  .allocation-details {
+    width: 68%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+
+    .details-wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Cabeçalho do Alojamento Selecionado */
+    .details-header-card {
+      padding: 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1.5px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+
+      .header-left {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .header-title-block {
+        h1 {
+          margin: 0;
+          font-size: 1.8rem;
+          font-weight: 700;
+          color: #ffffff;
+        }
+
+        .type-tag {
+          margin: 4px 0 0 0;
+          font-size: 0.85rem;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+      }
+
+      .capacity-summary {
+        max-width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        .gauge-label {
+          display: flex;
+          justify-content: space-between;
+          font-size: 0.85rem;
+          color: #94a3b8;
+
+          strong {
+            color: #ffffff;
+          }
+        }
+
+        .gauge-bar {
+          width: 100%;
+          height: 8px;
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 10px;
+          overflow: hidden;
+
+          .gauge-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.4s ease;
+          }
+        }
+      }
+
+      .action-btn-primary {
+        background: #4f46e5;
+        border: none;
+        color: #ffffff;
+        padding: 12px 20px;
+        border-radius: 14px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+
+        &:hover {
+          background: #4338ca;
+          transform: translateY(-1px);
+          box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+
+    /* Lista de Ocupantes */
+    .occupants-section {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+
+      /* Scrollbar personalizado */
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+      }
+
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+
+        h3 {
+          margin: 0;
+          font-size: 1.15rem;
+          color: #ffffff;
+          font-weight: 600;
+        }
+
+        .count-badge {
+          background: rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #94a3b8;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 2px 8px;
+          border-radius: 20px;
+        }
+      }
+    }
+
+    .loading-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 0;
+      color: rgba(255, 255, 255, 0.5);
+      gap: 12px;
+
+      .spinner-icon {
+        font-size: 2rem;
+        color: #4f46e5;
+      }
+    }
+
+    .occupants-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .occupant-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 18px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.12);
+        transform: scale(1.005);
+      }
+
+      .occupant-profile {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 30%;
+
+        ::ng-deep .occupant-avatar {
+          background-color: #4f46e5;
+          color: #ffffff;
+          font-weight: 600;
+        }
+
+        .profile-info {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+
+          .profile-name {
+            font-weight: 600;
+            color: #ffffff;
+            font-size: 0.95rem;
+          }
+
+          .profile-role {
+            font-size: 0.8rem;
+            color: #94a3b8;
+          }
+        }
+      }
+
+      .occupant-meta {
+        display: flex;
+        gap: 36px;
+        width: 40%;
+
+        .meta-item {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+
+          .meta-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+
+          .meta-val {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            font-weight: 500;
+          }
+        }
+      }
+
+      .occupant-actions {
+        display: flex;
+        gap: 10px;
+
+        .btn-action {
+          border: none;
+          padding: 8px 14px;
+          border-radius: 10px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: all 0.2s ease;
+
+          i {
+            font-size: 0.85rem;
+          }
+        }
+
+        .btn-transfer {
+          background: rgba(255, 255, 255, 0.06);
+          color: #cbd5e1;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+          }
+        }
+
+        .btn-checkout {
+          background: rgba(239, 68, 68, 0.1);
+          color: #f87171;
+          border: 1px solid rgba(239, 68, 68, 0.2);
+
+          &:hover {
+            background: #ef4444;
+            color: #ffffff;
+            border-color: #ef4444;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25);
+          }
+        }
+      }
+    }
+
+    .empty-occupants {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      color: rgba(255, 255, 255, 0.4);
+      gap: 12px;
+      text-align: center;
+
+      .empty-icon {
+        font-size: 3rem;
+        color: rgba(255, 255, 255, 0.15);
+      }
+
+      h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #ffffff;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: #64748b;
+        max-width: 320px;
+      }
+    }
+
+    /* State: Nenhum alojamento selecionado */
+    .no-selection-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 40px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.5);
+      gap: 16px;
+
+      .selection-icon {
+        font-size: 4rem;
+        color: rgba(255, 255, 255, 0.1);
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 1.5rem;
+        color: #ffffff;
+        font-weight: 600;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #94a3b8;
+        max-width: 400px;
+        line-height: 1.5;
+      }
+    }
+  }
+}

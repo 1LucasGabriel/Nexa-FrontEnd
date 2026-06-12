@@ -51,6 +51,54 @@ export class HousingService {
     });
   }
 
+  public postHousingAllocation(payload: any) {
+    return this.http.post<HousingAllocation>(`${this.urlAPI}/housing-allocations`, payload, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+  }
+
+  public putHousingAllocation(id: number, payload: any) {
+    return this.http.put<any>(`${this.urlAPI}/housing-allocations/${id}`, payload, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+  }
+
+  public deleteHousingAllocation(id: number) {
+    return this.http.delete<any>(`${this.urlAPI}/housing-allocations/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+  }
+
+  public getHousingRooms() {
+    return this.http.get<any[]>(`${this.urlAPI}/housing-rooms`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+  }
+
+  public postHousingRoom(payload: any) {
+    return this.http.post<any>(`${this.urlAPI}/housing-rooms`, payload, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+  }
+
+  public deleteHousingRoom(id: number) {
+    return this.http.delete<any>(`${this.urlAPI}/housing-rooms/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+  }
+
   public getVehicleTrips(housingId: number) {
     return this.http.get<VehicleTrip[]>(`${this.urlAPI}/vehicle-trips/housing/${housingId}`, {
       headers: {

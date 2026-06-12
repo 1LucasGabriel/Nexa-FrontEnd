@@ -9,7 +9,7 @@
     [totalRecords]="totalRecords"
     [loading]="loading"
     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
-    [tableStyle]="{ 'min-width': '60rem' }">
+    [tableStyle]="tableStyle">
 
     <ng-template #header>
       <tr class="header-row">
@@ -32,6 +32,8 @@
                 <span class="dot-large" [style.background-color]="status.color"></span>
                 <span [style.color]="'#fff'">{{ status.label }}</span>
               </div>
+            } @else if (col.type === 'date') {
+              {{ item[col.fieldAPI] | date: 'dd/MM/yyyy' }}
             } @else {
               {{ item[col.fieldAPI] }}
             }

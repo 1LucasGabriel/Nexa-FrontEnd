@@ -158,6 +158,78 @@ div.p-dialog.dark-modal,
   border-radius: 12px !important;
   z-index: 1100 !important;
   pointer-events: all !important;
+
+  input.p-inputtext {
+    background: rgba(217, 217, 217, 0.2) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    color: #FFFFFF !important;
+    padding: 0.65rem 0.9rem !important;
+    font-size: 0.9rem !important;
+    width: 100%;
+    box-shadow: none !important;
+    outline: none !important;
+
+    &::placeholder          { color: rgba(255,255,255,0.6) !important; }
+  }
+
+  p-select, p-inputnumber {
+    width: 100%;
+
+    .p-select, .p-inputnumber {
+      background: rgba(217, 217, 217, 0.2) !important;
+      border: none !important;
+      border-radius: 12px !important;
+      width: 100% !important;
+      box-shadow: none !important;
+
+      &.p-focus, &:focus, &:focus-within {
+        box-shadow: none !important;
+        outline: none !important;
+        border: none !important;
+      }
+    }
+
+    .p-select-label, .p-inputnumber-input {
+      background: transparent !important;
+      color: #FFFFFF !important;
+      padding: 0.65rem 0.9rem !important;
+      font-size: 0.9rem !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+
+      &::placeholder { color: rgba(255,255,255,0.6) !important; }
+    }
+
+    .p-select-dropdown {
+      color: #FFFFFF !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  [data-pc-name="inputnumber"] {
+    background: rgba(217, 217, 217, 0.2) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    box-shadow: none !important;
+
+    input {
+      background: transparent !important;
+      color: #FFFFFF !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+      padding: 0.65rem 0.9rem !important;
+      font-size: 0.9rem !important;
+      width: 100% !important;
+
+      &::placeholder { color: rgba(255,255,255,0.6) !important; }
+    }
+  }
 }
 
 .p-dialog-mask {
@@ -193,6 +265,15 @@ div.p-dialog.dark-modal,
 }
 
 .p-datepicker-panel {
+  width: auto !important;
+  max-width: 320px !important;
+  background: #1e1e24 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(10px) !important;
+  padding: 12px !important;
+  z-index: 100000 !important;
+
   [data-p-selected="true"] {
     background: #FF5A5F !important;
     color: #fff !important;
@@ -271,5 +352,4 @@ div.p-dialog.dark-modal,
 
 input {
   position: relative !important;
-  z-index: 99999 !important;
 }

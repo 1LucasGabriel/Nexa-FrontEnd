@@ -37,9 +37,24 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/employee-vehicle-allocation-page/employee-vehicle-allocation-page').then(m => m.EmployeeVehicleAllocationPage)
     },
     {
+        path: 'employee-housing-allocation',
+        title: 'Nexa - Alocação de Alojamentos',
+        loadComponent: () => import('./pages/employee-housing-allocation/employee-housing-allocation').then(m => m.EmployeeHousingAllocation)
+    },
+    {
         path: 'movement-control',
         title: 'Nexa - Controle de Movimentações',
         loadComponent: () => import('./pages/movement-control-page/movement-control-page').then(m => m.MovementControlPage)
+    },
+    {
+        path: 'configurations',
+        title: 'Nexa - Configurações',
+        loadComponent: () => import('./pages/configurations/configurations').then(m => m.Configurations)
+    },
+    {
+        path: 'operational-dashboard',
+        title: 'Nexa - Dashboard Operacional',
+        loadComponent: () => import('./pages/operational-dashboard/operational-dashboard').then(m => m.OperationalDashboard)
     },
     {
         path: '**',

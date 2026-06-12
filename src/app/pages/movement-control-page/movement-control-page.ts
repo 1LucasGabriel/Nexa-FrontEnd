@@ -11,7 +11,23 @@ export interface MovementLog {
   type: number;
   title: string;
   description: string;
-  date: string;
+  createdAt: string;
+  employeeId?: number | null;
+  vehicleId?: number | null;
+  housingId?: number | null;
+  statusLabel?: string;
+}
+
+export interface MovementsResponse {
+  housingTransfersCount: number;
+  housingCheckInsCount: number;
+  housingCheckOutsCount: number;
+  statusChangesCount: number;
+  vehicleTripsCount: number;
+  items: MovementLog[];
+  totalItems: number;
+  page: number;
+  pageSize: number;
 }
 
 @Component({
@@ -30,13 +46,20 @@ export class MovementControlPage implements OnInit {
   public originalMovements: MovementLog[] = [];
   public filteredMovements: MovementLog[] = [];
 
+  public page = 1;
+  public pageSize = 10;
+  public totalItems = 0;
+  public totalPages = 0;
+  public searchTerm = '';
+  public filterType = '';
+
   public statusMap: { [key: number]: { label: string; icon: string; color: string; bgColor: string; badgeBg: string } } = {
-    0: { label: 'Transferido', icon: 'pi pi-home', color: '#818cf8', bgColor: 'rgba(129, 140, 248, 0.15)', badgeBg: 'rgba(129, 140, 248, 0.2)' },
-    1: { label: 'Entrada', icon: 'pi pi-sign-in', color: '#a78bfa', bgColor: 'rgba(167, 139, 250, 0.15)', badgeBg: 'rgba(167, 139, 250, 0.2)' },
-    2: { label: 'Saída', icon: 'pi pi-sign-out', color: '#f472b6', bgColor: 'rgba(244, 114, 182, 0.15)', badgeBg: 'rgba(244, 114, 182, 0.2)' },
-    3: { label: 'De Férias', icon: 'pi pi-user', color: '#fbbf24', bgColor: 'rgba(251, 191, 36, 0.15)', badgeBg: 'rgba(251, 191, 36, 0.2)' },
-    4: { label: 'Em andamento', icon: 'pi pi-car', color: '#34d399', bgColor: 'rgba(52, 211, 153, 0.15)', badgeBg: 'rgba(52, 211, 153, 0.2)' },
-    5: { label: 'Concluída', icon: 'pi pi-car', color: '#f87171', bgColor: 'rgba(248, 113, 113, 0.15)', badgeBg: 'rgba(248, 113, 113, 0.2)' }
+    1: { label: 'Transferido', icon: 'pi pi-home', color: '#818cf8', bgColor: 'rgba(129, 140, 248, 0.15)', badgeBg: 'rgba(129, 140, 248, 0.2)' },
+    2: { label: 'Entrada', icon: 'pi pi-sign-in', color: '#a78bfa', bgColor: 'rgba(167, 139, 250, 0.15)', badgeBg: 'rgba(167, 139, 250, 0.2)' },
+    3: { label: 'Saída', icon: 'pi pi-sign-out', color: '#f472b6', bgColor: 'rgba(244, 114, 182, 0.15)', badgeBg: 'rgba(244, 114, 182, 0.2)' },
+    4: { label: 'De Férias', icon: 'pi pi-user', color: '#fbbf24', bgColor: 'rgba(251, 191, 36, 0.15)', badgeBg: 'rgba(251, 191, 36, 0.2)' },
+    5: { label: 'Em andamento', icon: 'pi pi-car', color: '#34d399', bgColor: 'rgba(52, 211, 153, 0.15)', badgeBg: 'rgba(52, 211, 153, 0.2)' },
+    6: { label: 'Concluída', icon: 'pi pi-car', color: '#f87171', bgColor: 'rgba(248, 113, 113, 0.15)', badgeBg: 'rgba(248, 113, 113, 0.2)' }
   };
 
   public counters = [
@@ -51,13 +74,32 @@ export class MovementControlPage implements OnInit {
     this.getMovements();
   }
 
+  public getSelectedTypes(): number[] {
+    if (!this.filterType) return [];
+    if (this.filterType === '1') return [1];
+    if (this.filterType === '2') return [2];
+    if (this.filterType === '3') return [3];
+    if (this.filterType === '4') return [4];
+    if (this.filterType === '5') return [5, 6];
+    return [];
+  }
+
   public getMovements() {
     this.loading = true;
-    this.movementService.getMovements().subscribe({
-      next: (data) => {
-        this.originalMovements = data;
-        this.filteredMovements = [...data];
-        this.calculateCounters();
+    const types = this.getSelectedTypes();
+
+    this.movementService.getMovements({
+      search: this.searchTerm || undefined,
+      types: types.length > 0 ? types : undefined,
+      page: this.page,
+      pageSize: this.pageSize
+    }).subscribe({
+      next: (response) => {
+        this.originalMovements = response.items;
+        this.filteredMovements = [...response.items];
+        this.totalItems = response.totalItems;
+        this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+        this.updateCounters(response);
         this.loading = false;
       },
       error: () => {
@@ -71,33 +113,30 @@ export class MovementControlPage implements OnInit {
     });
   }
 
-  private calculateCounters() {
-    this.counters[0].value = this.originalMovements.filter(m => m.type === 0).length;
-    this.counters[1].value = this.originalMovements.filter(m => m.type === 1).length;
-    this.counters[2].value = this.originalMovements.filter(m => m.type === 2).length;
-    this.counters[3].value = this.originalMovements.filter(m => m.type === 3).length;
-    this.counters[4].value = this.originalMovements.filter(m => m.type === 4 || m.type === 5).length;
+  private updateCounters(response: MovementsResponse) {
+    this.counters[0].value = response.housingTransfersCount;
+    this.counters[1].value = response.housingCheckInsCount;
+    this.counters[2].value = response.housingCheckOutsCount;
+    this.counters[3].value = response.statusChangesCount;
+    this.counters[4].value = response.vehicleTripsCount;
   }
-
-  public searchTerm = '';
-  public filterType: string = '';
 
   public onSearch(term: string) {
     this.searchTerm = term;
-    this.applyFilters();
+    this.page = 1;
+    this.getMovements();
   }
 
   public onFilterChange(event: Event) {
     this.filterType = (event.target as HTMLSelectElement).value;
-    this.applyFilters();
+    this.page = 1;
+    this.getMovements();
   }
 
-  private applyFilters() {
-    const lower = this.searchTerm.toLowerCase();
-    this.filteredMovements = this.originalMovements.filter(item => {
-      const matchesSearch = item.title.toLowerCase().includes(lower) || item.description.toLowerCase().includes(lower);
-      const matchesType = this.filterType === '' || item.type === +this.filterType || (this.filterType === '4' && item.type === 5);
-      return matchesSearch && matchesType;
-    });
+  public changePage(newPage: number) {
+    if (newPage >= 1 && newPage <= this.totalPages) {
+      this.page = newPage;
+      this.getMovements();
+    }
   }
 }

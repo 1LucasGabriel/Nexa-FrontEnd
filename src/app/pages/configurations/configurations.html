@@ -1,0 +1,152 @@
+<main>
+    <app-side-menu></app-side-menu>
+
+    <section>
+        <div class="header-section">
+            <div class="title-block">
+                <h1>Configurações</h1>
+                <p>Gerencie suas preferências, dados pessoais e segurança da conta.</p>
+            </div>
+        </div>
+
+        <div class="configurations-grid-container">
+            <div class="configurations-grid">
+                <!-- LEFT COLUMN -->
+                <div class="left-column">
+                    <!-- Profile Card -->
+                    <div class="profile-card config-card">
+                        <div class="avatar-container">
+                            <div class="profile-avatar-fallback">
+                                <i class="pi pi-user"></i>
+                            </div>
+                            <button class="edit-avatar-btn" type="button">
+                                <i class="pi pi-pencil"></i>
+                            </button>
+                        </div>
+                        <h2>Olá, {{ getFirstName(user.fullName) }}!</h2>
+                        <p>Gerencie suas informações e preferências de conta.</p>
+                    </div>
+
+                    <!-- Notifications Card -->
+                    <div class="notifications-card config-card">
+                        <div class="card-header">
+                            <span class="icon-badge badge-purple"><i class="pi pi-bell"></i></span>
+                            <h3>Notificações</h3>
+                        </div>
+                        <div class="bell-animation-container">
+                            <div class="bell-glow">
+                                <i class="pi pi-bell animated-bell"></i>
+                            </div>
+                        </div>
+                        <div class="notifications-text">
+                            <h4>Você está em dia!</h4>
+                            <p>Não há novas notificações no momento.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div class="right-column">
+                    <!-- Personal Data Card -->
+                    <div class="personal-data-card config-card">
+                        <div class="card-header">
+                            <span class="icon-badge badge-blue"><i class="pi pi-user"></i></span>
+                            <h3>Dados Pessoais</h3>
+                        </div>
+                        <form (ngSubmit)="savePersonalData()" #personalForm="ngForm" class="personal-data-form">
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label for="fullName">Nome Completo</label>
+                                    <input type="text" id="fullName" name="fullName" pInputText
+                                        [(ngModel)]="formModel.fullName" class="form-input" readonly>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group half-width">
+                                    <label for="role">Cargo</label>
+                                    <input type="text" id="role" name="role" pInputText [(ngModel)]="formModel.role"
+                                        class="form-input" readonly>
+                                </div>
+                                <div class="form-group half-width">
+                                    <label for="hireDate">Data de Admissão</label>
+                                    <p-datepicker id="hireDate" name="hireDate" [(ngModel)]="formModel.hireDate"
+                                        dateFormat="dd/mm/yy" [showIcon]="true" [iconDisplay]="'input'" appendTo="body"
+                                        styleClass="w-full" [disabled]="true"></p-datepicker>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group half-width">
+                                    <label for="cpf">CPF</label>
+                                    <div class="input-icon-wrapper">
+                                        <i class="pi pi-id-card input-field-icon"></i>
+                                        <input type="text" id="cpf" name="cpf" pInputText [(ngModel)]="formModel.cpf"
+                                            placeholder="488.126.308-04" class="form-input icon-padding" readonly>
+                                    </div>
+                                </div>
+                                <div class="form-group half-width">
+                                    <label for="phoneNumber">Telefone</label>
+                                    <div class="input-icon-wrapper">
+                                        <i class="pi pi-phone input-field-icon"></i>
+                                        <input type="text" id="phoneNumber" name="phoneNumber" pInputText
+                                            [(ngModel)]="formModel.phoneNumber" placeholder="(14) 98148-5756"
+                                            class="form-input icon-padding">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" pButton class="save-btn" label="Salvar Alterações"></button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Security Card -->
+                    <div class="security-card config-card">
+                        <div class="card-header">
+                            <span class="icon-badge badge-green"><i class="pi pi-shield"></i></span>
+                            <h3>Segurança</h3>
+                        </div>
+                        <div class="security-row">
+                            <div class="security-info">
+                                <span class="security-label">Senha</span>
+                                <span class="security-value">••••••••••••</span>
+                                <span class="security-sub" *ngIf="user.lastPasswordChange">Última alteração: {{
+                                    user.lastPasswordChange | date:'dd/MM/yyyy' }}</span>
+                                <span class="security-sub" *ngIf="!user.lastPasswordChange">Senha configurada</span>
+                            </div>
+                            <button pButton label="Alterar Senha" class="action-outline-btn"
+                                (click)="openPasswordModal()" type="button"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast for notifications -->
+    <p-toast></p-toast>
+
+    <!-- Change Password Dialog -->
+    <p-dialog header="Alterar Senha" [(visible)]="isPasswordModalOpen" [modal]="true" [draggable]="false"
+        [resizable]="false" [style]="{ width: '400px' }" class="password-dialog" appendTo="body">
+        <div class="dialog-content">
+            <div class="form-group">
+                <label for="newPassword">Nova Senha</label>
+                <p-password id="newPassword" [(ngModel)]="passwordData.newPassword" [toggleMask]="true"
+                    [feedback]="true" promptLabel="Digite a nova senha" weakLabel="Fraca" mediumLabel="Média"
+                    strongLabel="Forte" class="password-input" styleClass="w-full"></p-password>
+            </div>
+            <div class="form-group margin-top">
+                <label for="confirmPassword">Confirmar Nova Senha</label>
+                <p-password id="confirmPassword" [(ngModel)]="passwordData.confirmPassword" [toggleMask]="true"
+                    [feedback]="false" placeholder="Confirme a senha" class="password-input"
+                    styleClass="w-full"></p-password>
+            </div>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton label="Cancelar" class="p-button-text p-button-secondary"
+                (click)="isPasswordModalOpen = false" type="button"></button>
+            <button pButton label="Confirmar" class="p-button-primary" (click)="changePassword()"
+                type="button"></button>
+        </ng-template>
+    </p-dialog>
+</main>

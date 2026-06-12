@@ -83,6 +83,10 @@ main {
                     &.available {
                         color: #10B981;
                     }
+
+                    &.in-use {
+                        color: #3b82f6;
+                    }
                 }
 
                 .plate {
@@ -122,6 +126,10 @@ main {
         }
 
         .sidebar-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
             .add-vehicle-btn {
                 width: 100%;
                 padding: 12px;
@@ -135,6 +143,22 @@ main {
 
                 &:hover {
                     background: rgba(16, 185, 129, 0.1);
+                }
+            }
+
+            .add-driver-btn {
+                width: 100%;
+                padding: 12px;
+                border-radius: 8px;
+                background: transparent;
+                border: 1px solid #8b5cf6;
+                color: #a78bfa;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    background: rgba(139, 92, 246, 0.15);
                 }
             }
         }
@@ -176,20 +200,58 @@ main {
                         position: absolute;
                         left: 15px;
                         color: #8b5cf6;
+                        z-index: 5;
                     }
 
-                    .route-input {
-                        background: rgba(255, 255, 255, 0.05);
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                        border-radius: 8px;
-                        padding: 10px 15px;
-                        padding-left: 35px;
-                        color: #fff;
-                        width: 250px;
-                        outline: none;
+                    ::ng-deep .route-select {
+                        width: 280px;
 
-                        &:focus {
-                            border-color: rgba(255, 255, 255, 0.3);
+                        .p-select {
+                            background: rgba(255, 255, 255, 0.05) !important;
+                            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                            border-radius: 8px !important;
+                            width: 100% !important;
+                            box-shadow: none !important;
+
+                            &.p-disabled {
+                                opacity: 0.6;
+                                cursor: not-allowed;
+                            }
+
+                            &:not(.p-disabled):hover {
+                                border-color: rgba(255, 255, 255, 0.3) !important;
+                            }
+
+                            &.p-focus {
+                                border-color: #8b5cf6 !important;
+                            }
+
+                            .p-select-label {
+                                padding: 10px 15px !important;
+                                padding-left: 35px !important;
+                                color: #fff !important;
+                                font-size: 14px !important;
+                                height: auto !important;
+                                display: flex !important;
+                                align-items: center !important;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                            }
+
+                            .p-select-trigger {
+                                color: rgba(255, 255, 255, 0.6) !important;
+                            }
+                        }
+                    }
+
+                    &:nth-child(3) {
+                        ::ng-deep .route-select {
+                            .p-select {
+                                .p-select-label {
+                                    padding-left: 15px !important;
+                                }
+                            }
                         }
                     }
                 }
@@ -224,6 +286,44 @@ main {
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 25px;
+            position: relative;
+
+            .no-route-overlay {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(4px);
+                padding: 20px;
+                box-sizing: border-box;
+                text-align: center;
+                border-radius: 12px;
+
+                .map-placeholder-icon {
+                    font-size: 36px;
+                    color: #8b5cf6;
+                    margin-bottom: 12px;
+                    animation: pulse 2s infinite ease-in-out;
+                }
+
+                .placeholder-text {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #fff;
+                    margin: 0 0 6px 0;
+                }
+
+                .placeholder-subtext {
+                    font-size: 13px;
+                    color: rgba(255, 255, 255, 0.5);
+                    margin: 0;
+                    max-width: 400px;
+                    line-height: 1.4;
+                }
+            }
         }
 
         .bottom-split {
@@ -440,6 +540,11 @@ main {
                             i {
                                 font-size: 8px;
                             }
+
+                            &.in-use {
+                                background: rgba(59, 130, 246, 0.15);
+                                color: #3b82f6;
+                            }
                         }
                     }
 
@@ -543,4 +648,58 @@ main {
             }
         }
     }
+}
+
+::ng-deep .p-select-overlay {
+    background: #1e1e1e !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    border-radius: 12px !important;
+
+    .p-select-filter-container {
+        padding: 8px !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+
+        .p-select-filter {
+            background: rgba(255, 255, 255, 0.05) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 8px !important;
+            color: #fff !important;
+            padding: 8px 12px !important;
+            font-size: 14px !important;
+
+            &:focus {
+                border-color: #8b5cf6 !important;
+                box-shadow: none !important;
+            }
+        }
+    }
+
+    .p-select-list-container {
+        padding: 6px 0 !important;
+
+        .p-select-option {
+            padding: 10px 15px !important;
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-size: 14px !important;
+            transition: all 0.15s ease !important;
+            background: transparent !important;
+
+            &:hover, &.p-focus {
+                background: rgba(139, 92, 246, 0.15) !important;
+                color: #a78bfa !important;
+            }
+
+            &.p-select-option-selected {
+                background: #8b5cf6 !important;
+                color: #fff !important;
+            }
+        }
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
 }

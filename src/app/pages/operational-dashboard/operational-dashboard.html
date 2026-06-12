@@ -1,0 +1,291 @@
+<main>
+  <app-side-menu></app-side-menu>
+
+  <section>
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div class="header-titles">
+        <h1>Dashboard Operacional</h1>
+      </div>
+
+      <div class="header-actions">
+        <div class="auto-update-indicator">
+          <span class="pulse-dot"></span>
+          <span>Atualização automática</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid Superior (3 Cards) -->
+    <div class="up-section">
+      <!-- 1. Ocupação dos Alojamentos -->
+      <div class="up-info-block card-occupancy">
+        <div class="card-header">
+          <div class="card-title-block">
+            <h3>Ocupação dos Alojamentos</h3>
+            <p>Por unidade</p>
+          </div>
+          <button class="card-action-btn">Todos os alojamentos</button>
+        </div>
+
+        <div class="card-content">
+          <div class="progress-list">
+            <div class="progress-row" *ngFor="let h of housings">
+              <div class="progress-info">
+                <span class="housing-name">{{ h.name }}</span>
+                <div class="progress-metrics">
+                  <span class="percentage" [style.color]="h.color">{{ h.rate }}%</span>
+                  <span class="capacity">{{ h.currentCapacity }} / {{ h.maxCapacity }}</span>
+                </div>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" [style.width.%]="h.rate" [style.background-color]="h.color"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <div class="legend-row">
+            <span class="legend-item"><span class="dot green"></span>0% - 49%</span>
+            <span class="legend-item"><span class="dot orange"></span>50% - 79%</span>
+            <span class="legend-item"><span class="dot red"></span>80% - 100%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Utilização da Frota -->
+      <div class="up-info-block card-fleet">
+        <div class="card-header">
+          <div class="card-title-block">
+            <h3>Utilização da Frota</h3>
+            <p>Visão geral da frota de veículos</p>
+          </div>
+        </div>
+
+        <div class="card-content fleet-content">
+          <div class="chart-donut-wrapper">
+            <!-- Custom Donut SVG -->
+            <svg class="donut-svg" viewBox="0 0 150 150" width="150" height="150">
+              <circle cx="75" cy="75" r="50" fill="transparent" stroke="rgba(255,255,255,0.05)" stroke-width="15">
+              </circle>
+              <circle *ngFor="let seg of donutSegments" cx="75" cy="75" r="50" fill="transparent"
+                [attr.stroke]="seg.color" stroke-width="15" [attr.stroke-dasharray]="seg.dashArray"
+                [attr.stroke-dashoffset]="seg.dashOffset" transform="rotate(-90 75 75)" stroke-linecap="butt">
+              </circle>
+            </svg>
+            <div class="donut-center">
+              <span class="total-count">{{ fleetStats.total }}</span>
+              <span class="total-label">Total</span>
+            </div>
+          </div>
+
+          <div class="fleet-legend">
+            <div class="fleet-legend-item" *ngFor="let seg of donutSegments">
+              <div class="legend-label-block">
+                <span class="dot" [style.background-color]="seg.color"></span>
+                <span class="label-name">{{ seg.label }}</span>
+              </div>
+              <span class="label-count">{{ seg.count }}</span>
+              <span class="label-pct">{{ seg.pct }}%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer fleet-footer">
+          <div class="last-update-block">
+            <span>{{ lastUpdated }}</span>
+            <i class="pi pi-refresh" (click)="loadDashboardData()"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Capacidade Excedida -->
+      <div class="up-info-block card-alerts">
+        <div class="card-header">
+          <div class="card-title-block">
+            <h3>Capacidade Excedida</h3>
+            <p>Unidades com capacidade acima do limite</p>
+          </div>
+          <button class="card-action-btn">Ver todos</button>
+        </div>
+
+        <div class="card-content alerts-list">
+          <div class="alert-card" *ngFor="let alert of alerts">
+            <div class="alert-icon-block" [ngClass]="alert.colorClass">
+              <i class="pi pi-exclamation-triangle"></i>
+            </div>
+
+            <div class="alert-info">
+              <span class="alert-title">{{ alert.title }}</span>
+              <span class="alert-subtitle">{{ alert.subtitle }}</span>
+            </div>
+
+            <div class="alert-value" [ngClass]="alert.colorClass">
+              {{ alert.rate }}%
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grid Inferior (3 Cards) -->
+    <div class="bottom-section">
+      <!-- 4. Ranking Veículos Mais Utilizados -->
+      <div class="bottom-block card-ranking-vehicles">
+        <div class="card-header">
+          <div class="card-title-block">
+            <h3>Ranking Veículos Mais Utilizados</h3>
+            <p>Top 5 por número de viagens</p>
+          </div>
+          <button class="card-action-btn">Ver todos</button>
+        </div>
+
+        <div class="card-content">
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th style="width: 40px;">#</th>
+                <th>Veículo</th>
+                <th style="text-align: right;">Viagens</th>
+                <th style="width: 150px; text-align: right;">Utilização</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let v of topVehicles">
+                <td>{{ v.rank }}</td>
+                <td class="bold-text">{{ v.licensePlate }}</td>
+                <td style="text-align: right;">{{ v.trips }}</td>
+                <td>
+                  <div class="table-utilization">
+                    <span class="util-pct">{{ v.rate }}%</span>
+                    <div class="util-bar-bg">
+                      <div class="util-bar-fill" [style.width.%]="v.rate" [style.background-color]="v.color"></div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 5. Ranking Alojamentos -->
+      <div class="bottom-block card-ranking-housings">
+        <div class="card-header">
+          <div class="card-title-block">
+            <h3>Ranking Alojamentos</h3>
+            <p>Por taxa de ocupação</p>
+          </div>
+          <button class="card-action-btn">Ver todos</button>
+        </div>
+
+        <div class="card-content">
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th style="width: 40px;">#</th>
+                <th>Alojamento</th>
+                <th style="text-align: right;">Ocupação</th>
+                <th style="width: 100px; text-align: center;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let r of housingRanking">
+                <td>{{ r.rank }}</td>
+                <td class="bold-text">{{ r.name }}</td>
+                <td style="text-align: right;" class="occupancy-pct-col" [ngClass]="r.statusClass">{{ r.rate }}%</td>
+                <td style="text-align: center;">
+                  <span class="status-badge" [ngClass]="r.statusClass">{{ r.status }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 6. Evolução da Ocupação -->
+      <div class="bottom-block card-evolution">
+        <div class="card-header">
+          <div class="card-title-block">
+            <h3>Evolução da Ocupação</h3>
+            <p>Média de ocupação dos alojamentos</p>
+          </div>
+          <div class="card-dropdown-filter">
+            <span>{{ selectedPeriod }}</span>
+            <i class="pi pi-chevron-down"></i>
+          </div>
+        </div>
+
+        <div class="card-content chart-line-container">
+          <svg class="line-chart-svg" viewBox="0 0 500 200" width="100%" height="200">
+            <!-- Grid Lines and Ticks -->
+            <defs>
+              <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(124, 58, 237, 0.4)"></stop>
+                <stop offset="100%" stop-color="rgba(124, 58, 237, 0)"></stop>
+              </linearGradient>
+              <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#3b82f6"></stop>
+                <stop offset="100%" stop-color="#8b5cf6"></stop>
+              </linearGradient>
+            </defs>
+
+            <!-- Horizontal Grid lines -->
+            <line x1="50" y1="30" x2="450" y2="30" stroke="rgba(255,255,255,0.05)" stroke-width="1"></line>
+            <line x1="50" y1="65" x2="450" y2="65" stroke="rgba(255,255,255,0.05)" stroke-width="1"></line>
+            <line x1="50" y1="100" x2="450" y2="100" stroke="rgba(255,255,255,0.05)" stroke-width="1"></line>
+            <line x1="50" y1="135" x2="450" y2="135" stroke="rgba(255,255,255,0.05)" stroke-width="1"></line>
+            <line x1="50" y1="170" x2="450" y2="170" stroke="rgba(255,255,255,0.1)" stroke-width="1"></line>
+
+            <!-- Y Axis labels -->
+            <text x="35" y="34" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">100%</text>
+            <text x="35" y="69" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">75%</text>
+            <text x="35" y="104" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">50%</text>
+            <text x="35" y="139" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">25%</text>
+            <text x="35" y="174" fill="rgba(255,255,255,0.4)" font-size="10" text-anchor="end">0%</text>
+
+            <!-- Area Path (Gradient fill) -->
+            <path [attr.d]="areaPath" fill="url(#chartGradient)"></path>
+
+            <!-- Line Path -->
+            <path [attr.d]="linePath" fill="none" stroke="url(#lineGradient)" stroke-width="3" stroke-linecap="round"
+              stroke-linejoin="round"></path>
+
+            <!-- Grid dots / interactive points -->
+            <circle *ngFor="let p of occupancyEvolution" [attr.cx]="p.x" [attr.cy]="p.y" r="5" fill="#8b5cf6"
+              stroke="#fff" stroke-width="2.5" class="chart-dot" (click)="selectPoint(p)" (mouseenter)="selectPoint(p)">
+            </circle>
+
+            <!-- X Axis labels -->
+            <text *ngFor="let p of occupancyEvolution" [attr.x]="p.x" y="190" fill="rgba(255,255,255,0.4)"
+              font-size="10" text-anchor="middle">
+              {{ p.label }}
+            </text>
+
+            <!-- Tooltip Hover in SVG -->
+            <g *ngIf="tooltipPoint" class="chart-tooltip-group">
+              <!-- Connector line -->
+              <line [attr.x1]="tooltipPoint.x" [attr.y1]="tooltipPoint.y" [attr.x2]="tooltipPoint.x" y2="170"
+                stroke="rgba(139, 92, 246, 0.4)" stroke-width="1.5" stroke-dasharray="3 3"></line>
+
+              <!-- Circle Highlight -->
+              <circle [attr.cx]="tooltipPoint.x" [attr.cy]="tooltipPoint.y" r="8" fill="rgba(139, 92, 246, 0.3)"
+                stroke="#8b5cf6" stroke-width="1.5"></circle>
+
+              <!-- Tooltip Box (shifted up slightly) -->
+              <rect [attr.x]="tooltipPoint.x - 35" [attr.y]="tooltipPoint.y - 45" width="70" height="35" rx="6"
+                fill="#111622" stroke="rgba(255,255,255,0.1)" stroke-width="1"></rect>
+              <text [attr.x]="tooltipPoint.x" [attr.y]="tooltipPoint.y - 32" fill="#fff" font-size="11"
+                font-weight="bold" text-anchor="middle">{{ tooltipPoint.rate }}%</text>
+              <text [attr.x]="tooltipPoint.x" [attr.y]="tooltipPoint.y - 19" fill="rgba(255,255,255,0.5)"
+                font-size="8.5" text-anchor="middle">{{ tooltipPoint.label }}</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<p-toast></p-toast>
