@@ -36,7 +36,7 @@ O sistema é estruturado em módulos específicos que cobrem as principais neces
 
 ## 🛠️ Tecnologias Utilizadas
 
-A Nexa foi construída utilizando o que há de mais moderno e robusto no ecossistema web para desenvolvimento de SPAs (Single Page Applications):
+A Nexa foi construída utilizando o que há de mais moderno e robusto no ecossistema web:
 
 * **[Angular v20](https://angular.dev/)**: Framework principal do frontend, estruturado com componentes independentes (*standalone*) e reatividade de alta performance.
 * **[TypeScript](https://www.typescriptlang.org/)**: Tipagem estática para maior segurança, legibilidade e facilidade de refatoração do código.
